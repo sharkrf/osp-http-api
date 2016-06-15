@@ -41,7 +41,7 @@ Example login process with example JSON queries:
 - Now we are logged in and can call all API interfaces with the *token* and *digest*.
 
 ## API interfaces
-DBG("%s\n", u.new_syncwords_str);
+
 ### gettok.cgi
 
 Doesn't take any parameters from a query. Returns the session token, which is a hexadecimal uint32_t (8 ASCII characters).
