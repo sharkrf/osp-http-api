@@ -227,7 +227,6 @@ Query (optional):
   "new_local_module": "A",
   "new_reflector": "DCS025",
   "new_remote_module": "Z",
-  "keepalive_interval_sec": 5,
   "rx_timeout_sec": 30
 ```
 Response:
