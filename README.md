@@ -133,7 +133,10 @@ Response:
   "rssi_tc0_values_dbm": [-60,-62,-65],
   "rssi_tc1_values_dbm": [-60,-62,-65],
   "dejitter_buf_tc0_pkts": [0, 1, 2],
-  "dejitter_buf_tc1_pkts": [0, 1, 2]
+  "dejitter_buf_tc1_pkts": [0, 1, 2],
+  "ber_tc0_values": [0, 1, 2],
+  "ber_tc1_values": [0, 1, 2],
+  "invalid_seqnums": 5
 }
 ```
 
@@ -141,7 +144,14 @@ Response:
 
 If you want to change openSPOT's active connector, you can POST a query to this CGI. *changed* is 1 if the active connector is changed.
 
-See *getstatus.cgi* for the valid connector IDs.
+Valid connector IDs:
+
+- 0: No connector set.
+- 1: DMRplus
+- 2: Homebrew
+- 3: TS repeat
+- 4: DCS
+- 5: FCS
 
 Query (optional):
 ```json
@@ -170,6 +180,7 @@ Query (optional):
   "new_reflector_id": 0,
   "new_keepalive_interval_sec": 1,
   "new_rx_timeout_sec": 10
+}
 ```
 Response:
 ```json
@@ -181,6 +192,7 @@ Response:
   "reflector_id": 0,
   "keepalive_interval_sec": 1,
   "rx_timeout_sec": 10
+}
 ```
 
 ### homebrewsettings.cgi
@@ -227,7 +239,8 @@ Query (optional):
   "new_local_module": "A",
   "new_reflector": "DCS025",
   "new_remote_module": "Z",
-  "rx_timeout_sec": 30
+  "new_rx_timeout_sec": 30
+}
 ```
 Response:
 ```json
@@ -240,7 +253,40 @@ Response:
   "local_module": "A",
   "reflector": "DCS025",
   "remote_module": "Z",
+  "rx_timeout_sec": 1
+}
+```
+
+### fcssettings.cgi
+
+If you want to change the FCS connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+
+Query (optional):
+```json
+{
+  "new_server_host": "fcs001.xreflector.net",
+  "new_port": 12345,
+  "new_callsign": "",
+  "new_ccs7_id": 2161005,
+  "new_reflector": "FCS001",
+  "new_room_number": 25,
+  "new_keepalive_interval_sec: 1,
+  "new_rx_timeout_sec": 30
+}
+```
+Response:
+```json
+{
+  "changed": 1,
+  "server_host": "fcs001.xreflector.net",
+  "port": 12345,
+  "callsign": "",
+  "ccs7_id": 2161005,
+  "reflector": "FCS001",
+  "room_number": 25,
+  "keepalive_interval_sec": 1,
   "rx_timeout_sec": 10
+}
 ```
 
 ### info.cgi
