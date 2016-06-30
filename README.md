@@ -207,6 +207,10 @@ Query (optional):
   "new_callsign": "",
   "new_password": "",
   "new_repeater_id": 901234,
+  "new_autocon_id": 4771,
+  "new_autocon_tdma_channel": 0,
+  "new_autocon_interval_sec": 500,
+  "new_dmo_tdma_channel": 0,
   "new_keepalive_interval_sec": 5,
   "new_rx_timeout_sec": 30
 }
@@ -220,6 +224,10 @@ Response:
   "callsign": "",
   "password": "",
   "repeater_id": 901234,
+  "autocon_id": 4771,
+  "autocon_tdma_channel": 0,
+  "autocon_interval_sec": 500,
+  "dmo_tdma_channel": 0,
   "keepalive_interval_sec": 5,
   "rx_timeout_sec": 30
 }
@@ -392,6 +400,7 @@ Query (optional):
 {
   "new_cc": 1,
   "new_echo_id": 9999,
+  "new_default_c4fm_id": 0,
   "new_transmit_idle_in_idle_tx_tdma_channel": 1
 }
 ```
@@ -401,6 +410,7 @@ Response:
   "changed": 1,
   "cc": 1,
   "echo_id": 9999,
+  "default_c4fm_id": 0,
   "transmit_idle_in_idle_tx_tdma_channel": 1
 }
 ```
