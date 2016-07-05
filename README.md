@@ -152,6 +152,8 @@ Valid connector IDs:
 - 3: TS repeat
 - 4: DCS
 - 5: FCS
+- 6: SharkRF IP Connector Client
+- 7: SharkRF IP Connector Server
 
 Query (optional):
 ```json
@@ -294,6 +296,58 @@ Response:
   "room_number": 25,
   "keepalive_interval_sec": 1,
   "rx_timeout_sec": 10
+}
+```
+
+### srfipconnclientsettings.cgi
+
+If you want to change the SharkRF IP Connector Client settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+
+Query (optional):
+```json
+{
+  "new_server_host": "192.168.3.120",
+  "new_port": 65100,
+  "new_id": 2161005,
+  "new_password": "abcdefgh",
+  "new_callsign": "",
+  "new_keepalive_interval_sec: 5,
+  "new_rx_timeout_sec": 30
+}
+```
+Response:
+```json
+{
+  "changed": 1,
+  "server_host": "192.168.3.120",
+  "port": 65100,
+  "id": 2161005,
+  "password": "abcdefgh",
+  "callsign": "",
+  "keepalive_interval_sec: 5,
+  "rx_timeout_sec": 30
+}
+```
+
+### srfipconnserversettings.cgi
+
+If you want to change the SharkRF IP Connector Server settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+
+Query (optional):
+```json
+{
+  "new_port": 65100,
+  "new_password": "abcdefgh",
+  "new_rx_timeout_sec": 30
+}
+```
+Response:
+```json
+{
+  "changed": 1,
+  "port": 65100,
+  "password": "abcdefgh",
+  "rx_timeout_sec": 30
 }
 ```
 
