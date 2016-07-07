@@ -140,6 +140,21 @@ Response:
 }
 ```
 
+### status-srfipconnserver.cgi
+
+Returns the SharkRF IP Connector Server's current status, if it's the active connector. Otherwise it'll return with 400 Bad Request.
+
+**client_connected** is 1 if a client is connected.
+
+Response:
+```json
+{
+  "client_connected": 0,
+  "client_id": 1234,
+  "client_callsign": ""
+}
+```
+
 ### connector.cgi
 
 If you want to change openSPOT's active connector, you can POST a query to this CGI. *changed* is 1 if the active connector is changed.
