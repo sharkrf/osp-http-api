@@ -140,6 +140,40 @@ Response:
 }
 ```
 
+### status-dmrsms.cgi
+
+Returns current status of DMR SMS sending, if the modem is in DMR mode. Otherwise it'll return with 400 Bad Request.
+Also it handles SMS sending.
+
+Call types: 0 - private, 1 - group.
+If a new message is received, *rx_msg_valid* is 1.
+Setting a new *send_srcid* in the query overwrites the *default_srcid*.
+
+Messages are in Javascript escaped UTF16BE format.
+
+Query (optional):
+```json
+{
+  "send_dstid": 2161005,
+  "send_calltype": 0,
+  "send_srcid": 9998,
+  "send_msg": ""
+}
+```
+
+Response:
+```json
+{
+  "default_srcid": 9998,
+  "send_ongoing": 0,
+  "send_successful": 1,
+  "rx_msg_valid": 0
+  "rx_msg_srcid": 1234
+  "rx_msg_calltype": 0,
+  "rx_msg": "\u0066\u0069\u0069\u0082"
+}
+```
+
 ### status-srfipconnserver.cgi
 
 Returns the SharkRF IP Connector Server's current status, if it's the active connector. Otherwise it'll return with 400 Bad Request.
