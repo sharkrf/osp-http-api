@@ -150,7 +150,7 @@ Format IDs: 0 - ETSI, 1 - UDP. See user manual for more info.
 If a new message is received, *rx_msg_valid* is 1.
 Setting a new *send_srcid* in the query overwrites the *default_srcid*.
 
-Messages are in Javascript escaped UTF16BE format.
+Messages are in hexadecimal UTF16BE format. Example: "BEER" = "0042004500450052"
 
 Query (optional):
 ```json
@@ -159,7 +159,7 @@ Query (optional):
   "send_calltype": 0,
   "send_srcid": 9998,
   "send_format": 0,
-  "send_msg": ""
+  "send_msg": "0042004500450052"
 }
 ```
 
@@ -174,7 +174,7 @@ Response:
   "rx_msg_srcid": 1234
   "rx_msg_calltype": 0,
   "rx_msg_format": 0,
-  "rx_msg": "\u0066\u0069\u0069\u0082"
+  "rx_msg": "0042004500450052"
 }
 ```
 
