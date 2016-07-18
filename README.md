@@ -146,6 +146,7 @@ Returns current status of DMR SMS sending, if the modem is in DMR mode. Otherwis
 Also it handles SMS sending.
 
 Call types: 0 - private, 1 - group.
+Format IDs: 0 - ETSI, 1 - UDP. See user manual for more info.
 If a new message is received, *rx_msg_valid* is 1.
 Setting a new *send_srcid* in the query overwrites the *default_srcid*.
 
@@ -157,6 +158,7 @@ Query (optional):
   "send_dstid": 2161005,
   "send_calltype": 0,
   "send_srcid": 9998,
+  "send_format": 0,
   "send_msg": ""
 }
 ```
@@ -170,6 +172,7 @@ Response:
   "rx_msg_valid": 0
   "rx_msg_srcid": 1234
   "rx_msg_calltype": 0,
+  "rx_msg_format": 0,
   "rx_msg": "\u0066\u0069\u0069\u0082"
 }
 ```
