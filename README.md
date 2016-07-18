@@ -168,7 +168,8 @@ Response:
 {
   "default_srcid": 9998,
   "send_ongoing": 0,
-  "send_successful": 1,
+  "send_success": 1,
+  "send_fail": 0,
   "rx_msg_valid": 0
   "rx_msg_srcid": 1234
   "rx_msg_calltype": 0,
