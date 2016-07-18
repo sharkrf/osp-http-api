@@ -151,6 +151,7 @@ If a new message is received, *rx_msg_valid* is 1.
 Setting a new *send_srcid* in the query overwrites the *default_srcid*.
 
 Messages are in hexadecimal UTF16BE format. Example: "BEER" = "0042004500450052"
+Max. message length which can be sent is currently 75 UTF16BE characters (150 hex char pairs).
 
 Query (optional):
 ```json
