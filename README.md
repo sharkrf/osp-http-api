@@ -407,7 +407,7 @@ Response:
 
 ### info.cgi
 
-Allows you to query general info about the openSPOT box. *blver* is the bootloader version.
+Allows you to query general info about the openSPOT box. *blver* is the bootloader version. *uid* is the device unique ID in hexadecimal.
 
 Response:
 ```json
@@ -416,7 +416,7 @@ Response:
   "swver": "0001",
   "blver": "0001",
   "mac": "FE:28:00:00:00:FA",
-  "serialnr": 123
+  "uid": "abcdef"
 }
 ```
 
