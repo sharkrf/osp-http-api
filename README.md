@@ -126,6 +126,8 @@ Returns openSPOT's current status.
 
 **dejitter_buf_tc0_pkts** and **dejitter_buf_tc1_pkts** contain dejitter buffer packet count values since the last call of *status.cgi*. If the current modem mode is non-TDMA, then ignore *dejitter_buf_tc1_pkts*.
 
+The packet and byte UDP traffic counters are monotonically increasing 32 bit values.
+
 Response:
 ```json
 {
@@ -136,7 +138,11 @@ Response:
   "dejitter_buf_tc1_pkts": [0, 1, 2],
   "ber_tc0_values": [0, 1, 2],
   "ber_tc1_values": [0, 1, 2],
-  "invalid_seqnums": 5
+  "invalid_seqnums": 5,
+  "rx_pkts": 32,
+  "rx_bytes": 14421,
+  "tx_pkts": 32,
+  "tx_bytes": 14421
 }
 ```
 
