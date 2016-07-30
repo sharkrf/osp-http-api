@@ -551,10 +551,13 @@ Response:
 
 If you want to change the current RX, TX frequency or TX power without reinitializing the modem, you can POST a query to this CGI. *changed* is 1 if the frequency got changed. Returns currently active settings.
 
+DMR demodulation mode values: 0 - A, 1 - B, 2 - C etc.
+
 Query (optional):
 ```json
 {
   "new_rx_frequency": 433450000,
+  "new_dmr_demodmode": 0,
   "new_tx_frequency": 433450000,
   "new_tx_power_percent": 100
 }
@@ -564,6 +567,7 @@ Response:
 {
   "changed": 1,
   "rx_frequency": 433450000,
+  "dmr_demodmode": 0,
   "tx_frequency": 433450000,
   "tx_power_percent": 100
 }
