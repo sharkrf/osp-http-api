@@ -236,6 +236,8 @@ If you want to change the DMRplus connector settings, you can POST a query to th
 Query (optional):
 ```json
 {
+  "new_rx_freq": 436000000,
+  "new_tx_freq": 436000000,
   "new_server_host": "",
   "new_port": 8880,
   "new_dmr_id": "",
@@ -248,6 +250,8 @@ Response:
 ```json
 {
   "changed": 1,
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
   "server_host": "",
   "port": 8880,
   "dmr_id": "",
@@ -266,6 +270,8 @@ Valid *c4fm_dstcalltype* values: 0 - group call, 1 - private call.
 Query (optional):
 ```json
 {
+  "new_rx_freq": 436000000,
+  "new_tx_freq": 436000000,
   "new_server_host": "",
   "new_port": 62030,
   "new_callsign": "",
@@ -284,6 +290,8 @@ Query (optional):
 Response:
 ```json
 {
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
   "changed": 1,
   "server_host": "",
   "port": 62030,
@@ -308,6 +316,8 @@ If you want to change the DCS connector settings, you can POST a query to this C
 Query (optional):
 ```json
 {
+  "new_rx_freq": 436000000,
+  "new_tx_freq": 436000000,
   "new_server_host": "",
   "new_port": 12345,
   "new_ccs_port": 12345,
@@ -322,6 +332,8 @@ Response:
 ```json
 {
   "changed": 1,
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
   "server_host": "",
   "port": 12345,
   "ccs_port": 12345,
@@ -341,6 +353,8 @@ Query (optional):
 ```json
 {
   "new_server_host": "fcs001.xreflector.net",
+  "new_rx_freq": 436000000,
+  "new_tx_freq": 436000000,
   "new_port": 12345,
   "new_callsign": "",
   "new_ccs7_id": 2161005,
@@ -354,6 +368,8 @@ Response:
 ```json
 {
   "changed": 1,
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
   "server_host": "fcs001.xreflector.net",
   "port": 12345,
   "callsign": "",
@@ -372,6 +388,8 @@ If you want to change the SharkRF IP Connector Client settings, you can POST a q
 Query (optional):
 ```json
 {
+  "new_rx_freq": 436000000,
+  "new_tx_freq": 436000000,
   "new_server_host": "192.168.3.120",
   "new_port": 65100,
   "new_id": 2161005,
@@ -385,6 +403,8 @@ Response:
 ```json
 {
   "changed": 1,
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
   "server_host": "192.168.3.120",
   "port": 65100,
   "id": 2161005,
@@ -402,6 +422,8 @@ If you want to change the SharkRF IP Connector Server settings, you can POST a q
 Query (optional):
 ```json
 {
+  "new_rx_freq": 436000000,
+  "new_tx_freq": 436000000,
   "new_port": 65100,
   "new_password": "abcdefgh",
   "new_rx_timeout_sec": 30
@@ -411,6 +433,8 @@ Response:
 ```json
 {
   "changed": 1,
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
   "port": 65100,
   "password": "abcdefgh",
   "rx_timeout_sec": 30
