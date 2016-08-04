@@ -266,7 +266,7 @@ Response:
 
 If you want to change the Homebrew connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
 
-Valid *c4fm_dstcalltype* values: 0 - group call, 1 - private call.
+Valid *c4fm_dstcalltype* and *reroute_calltype* values: 0 - group call, 1 - private call.
 
 Query (optional):
 ```json
@@ -284,6 +284,8 @@ Query (optional):
   "new_dmo_tdma_channel": 0,
   "new_c4fm_dstid": 9,
   "new_c4fm_dstcalltype": 0,
+  "new_reroute_id": 9990,
+  "new_reroute_calltype": 1,
   "new_keepalive_interval_sec": 5,
   "new_rx_timeout_sec": 30
 }
@@ -305,6 +307,8 @@ Response:
   "dmo_tdma_channel": 0,
   "c4fm_dstid": 9,
   "c4fm_dstcalltype": 0,
+  "reroute_id": 9990,
+  "reroute_calltype": 1,
   "keepalive_interval_sec": 5,
   "rx_timeout_sec": 30
 }
