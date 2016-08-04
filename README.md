@@ -613,6 +613,26 @@ Response:
 }
 ```
 
+### locksettings.cgi
+
+If you want to change callsign/CCS7 ID lock settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+
+Query (optional):
+```json
+{
+  "new_id": 2161005,
+  "new_callsign": "HA2NON"
+}
+```
+Response:
+```json
+{
+  "changed": 0,
+  "id": 0,
+  "callsign": ""
+}
+```
+
 ### modemfreq.cgi
 
 If you want to change the current RX, TX frequency or TX power without reinitializing the modem, you can POST a query to this CGI. *changed* is 1 if the frequency got changed. Returns currently active settings.
