@@ -214,6 +214,7 @@ Valid connector IDs:
 - 5: FCS
 - 6: SharkRF IP Connector Client
 - 7: SharkRF IP Connector Server
+- 8: DMR demodulation mode auto calibration
 
 Query (optional):
 ```json
@@ -438,6 +439,37 @@ Response:
   "port": 65100,
   "password": "abcdefgh",
   "rx_timeout_sec": 30
+}
+```
+
+### dmrautocal.cgi
+
+You can periodically query this CGI to get current DMR demodulation mode auto calibration status. Also you can change this connector's modem RX/TX frequencies. When the frequencies are changed, the connector is restarted.
+
+State can be:
+
+- 0: idle
+- 1: calibrating
+- 2: finished, result available
+- 3: modem is not in DMR mode
+
+Progress is in percent. Result is the auto calibrated demodulation mode (0 - A, 1 - B, 2 - C, etc.)
+
+Query (optional):
+```json
+{
+  "new_rx_freq": 436000000,
+  "new_tx_freq": 436000000,
+}
+```
+Response:
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "state": 1,
+  "progress": 56,
+  "result": 2
 }
 ```
 
