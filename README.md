@@ -215,6 +215,7 @@ Valid connector IDs:
 - 6: SharkRF IP Connector Client
 - 7: SharkRF IP Connector Server
 - 8: DMR demodulation mode auto calibration
+- 9: REF
 
 Query (optional):
 ```json
@@ -346,6 +347,42 @@ Response:
   "local_module": "A",
   "reflector": "DCS025",
   "remote_module": "Z",
+  "rx_timeout_sec": 1
+}
+```
+
+### refsettings.cgi
+
+If you want to change the REF connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+
+Query (optional):
+```json
+{
+  "new_rx_freq": 436000000,
+  "new_tx_freq": 436000000,
+  "new_server_host": "",
+  "new_port": 12345,
+  "new_ccs_port": 12345,
+  "new_callsign": "",
+  "new_local_module": "D",
+  "new_reflector": "REF001",
+  "new_remote_module": "C",
+  "new_rx_timeout_sec": 30
+}
+```
+Response:
+```json
+{
+  "changed": 1,
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "",
+  "port": 12345,
+  "ccs_port": 12345,
+  "callsign": "",
+  "local_module": "D",
+  "reflector": "REF001",
+  "remote_module": "C",
   "rx_timeout_sec": 1
 }
 ```
@@ -610,6 +647,24 @@ Response:
 {
   "changed": 1,
   "echo_callsign": "       E"
+}
+```
+
+### c4fmsettings.cgi
+
+If you want to change general C4FM settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+
+Query (optional):
+```json
+{
+  "new_dtmf_automute_cmds": 1
+}
+```
+Response:
+```json
+{
+  "changed": 1,
+  "dtmf_automute_cmds": 1
 }
 ```
 
