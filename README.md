@@ -278,7 +278,7 @@ Response:
 
 If you want to change the Homebrew connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
 
-Valid *c4fm_dstcalltype* and *reroute_calltype* values: 0 - group call, 1 - private call.
+Valid *autocon_calltype*, *c4fm_dstcalltype* and *reroute_calltype* values: 0 - group call, 1 - private call.
 
 Query (optional):
 ```json
@@ -291,6 +291,7 @@ Query (optional):
   "new_password": "",
   "new_repeater_id": 901234,
   "new_autocon_id": 4771,
+  "new_autocon_calltype": 0,
   "new_autocon_tdma_channel": 0,
   "new_autocon_interval_sec": 500,
   "new_dmo_tdma_channel": 0,
