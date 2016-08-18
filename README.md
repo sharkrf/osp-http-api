@@ -42,6 +42,17 @@ Example login process with example JSON queries:
 
 ## API interfaces
 
+### ip.cgi
+
+Returns the IP address of openSPOT.
+
+Response:
+```json
+{
+  "ip": "192.168.3.106"
+}
+```
+
 ### gettok.cgi
 
 Doesn't take any parameters from a query. Returns the session token, which is a hexadecimal uint32_t (8 ASCII characters).
