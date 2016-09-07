@@ -226,7 +226,8 @@ Valid connector IDs:
 - 6: SharkRF IP Connector Client
 - 7: SharkRF IP Connector Server
 - 8: DMR demodulation mode auto calibration
-- 9: REF
+- 9: REF/XRF
+- 10: YSFReflector
 
 Query (optional):
 ```json
@@ -365,9 +366,9 @@ Response:
 }
 ```
 
-### refsettings.cgi
+### refxrfsettings.cgi
 
-If you want to change the REF connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+If you want to change the REF/XRF connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
 
 Query (optional):
 ```json
@@ -432,6 +433,36 @@ Response:
   "ccs7_id": 2161005,
   "reflector": "FCS001",
   "room_number": 25,
+  "keepalive_interval_sec": 1,
+  "rx_timeout_sec": 10
+}
+```
+
+### ysfrefsettings.cgi
+
+If you want to change the YSFReflector connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+
+Query (optional):
+```json
+{
+  "new_server_host": "",
+  "new_rx_freq": 436000000,
+  "new_tx_freq": 436000000,
+  "new_port": 42000,
+  "new_callsign": "",
+  "new_keepalive_interval_sec: 1,
+  "new_rx_timeout_sec": 30
+}
+```
+Response:
+```json
+{
+  "changed": 1,
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "",
+  "port": 42000,
+  "callsign": "",
   "keepalive_interval_sec": 1,
   "rx_timeout_sec": 10
 }
