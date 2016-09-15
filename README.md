@@ -153,7 +153,8 @@ Response:
   "rx_pkts": 32,
   "rx_bytes": 14421,
   "tx_pkts": 32,
-  "tx_bytes": 14421
+  "tx_bytes": 14421,
+  "connected_to": "DCS001 A"
 }
 ```
 
@@ -188,8 +189,8 @@ Response:
   "send_ongoing": 0,
   "send_success": 1,
   "send_fail": 0,
-  "rx_msg_valid": 0
-  "rx_msg_srcid": 1234
+  "rx_msg_valid": 0,
+  "rx_msg_srcid": 1234,
   "rx_msg_calltype": 0,
   "rx_msg_format": 0,
   "rx_msg": "0042004500450052"
@@ -417,7 +418,7 @@ Query (optional):
   "new_ccs7_id": 2161005,
   "new_reflector": "FCS001",
   "new_room_number": 25,
-  "new_keepalive_interval_sec: 1,
+  "new_keepalive_interval_sec": 1,
   "new_rx_timeout_sec": 30
 }
 ```
@@ -450,7 +451,7 @@ Query (optional):
   "new_tx_freq": 436000000,
   "new_port": 42000,
   "new_callsign": "",
-  "new_keepalive_interval_sec: 1,
+  "new_keepalive_interval_sec": 1,
   "new_rx_timeout_sec": 30
 }
 ```
@@ -482,7 +483,7 @@ Query (optional):
   "new_id": 2161005,
   "new_password": "abcdefgh",
   "new_callsign": "",
-  "new_keepalive_interval_sec: 5,
+  "new_keepalive_interval_sec": 5,
   "new_rx_timeout_sec": 30
 }
 ```
@@ -497,7 +498,7 @@ Response:
   "id": 2161005,
   "password": "abcdefgh",
   "callsign": "",
-  "keepalive_interval_sec: 5,
+  "keepalive_interval_sec": 5,
   "rx_timeout_sec": 30
 }
 ```
