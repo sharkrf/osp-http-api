@@ -178,6 +178,7 @@ Query (optional):
   "send_calltype": 0,
   "send_srcid": 9998,
   "send_format": 0,
+  "send_tdma_channel": 0,
   "send_msg": "0042004500450052"
 }
 ```
