@@ -223,7 +223,7 @@ Valid connector IDs:
 - 1: DMRplus
 - 2: Homebrew
 - 3: TS repeat
-- 4: DCS
+- 4: DCS/XLX
 - 5: FCS
 - 6: SharkRF IP Connector Client
 - 7: SharkRF IP Connector Server
@@ -332,9 +332,9 @@ Response:
 }
 ```
 
-### dcssettings.cgi
+### dcsxlxsettings.cgi
 
-If you want to change the DCS connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+If you want to change the DCS/XLX connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
 
 Query (optional):
 ```json
