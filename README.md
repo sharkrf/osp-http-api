@@ -2,7 +2,7 @@
 
 The HTTP API uses JSON queries and replies.
 
-All queries except gettok.cgi must include a valid token and digest. To acquire these, your application must complete the login process. These two keys are not represented in the JSON structure descriptions below.
+All queries except gettok.cgi must include a valid token and digest. To acquire these, your application must complete the login process. These two keys are not represented in the JSON structure descriptions below. Token/digest pairs stay valid for 3600 seconds after the last valid query.
 
 ## Login process
 
