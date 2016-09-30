@@ -167,6 +167,9 @@ Call types: 0 - private, 1 - group.
 Format IDs: 0 - ETSI, 1 - UDP, 2 - UDP/Chinese. See user manual for more info.
 If a new message is received, *rx_msg_valid* is 1.
 Setting a new *send_srcid* in the query overwrites the *default_srcid*.
+If *send_to_modem* is 0, the SMS will be sent to the currently active connector.
+If *intercept_net_msgs* is 1, then SMS messages coming from the network to the *default_srcid* will be processed.
+If *only_save* is 1, the SMS will not get sent, only the *send_srcid* and *intercept_net* settings will be stored.
 
 Messages are in hexadecimal UTF16BE format. Example: "BEER" = "0042004500450052"
 Max. message length which can be sent is currently 75 UTF16BE characters (150 hex char pairs).
@@ -174,11 +177,14 @@ Max. message length which can be sent is currently 75 UTF16BE characters (150 he
 Query (optional):
 ```json
 {
+  "only_save": 0,
+  "intercept_net_msgs": 0,
   "send_dstid": 2161005,
   "send_calltype": 0,
   "send_srcid": 9998,
   "send_format": 0,
   "send_tdma_channel": 0,
+  "send_to_modem": 0,
   "send_msg": "0042004500450052"
 }
 ```
@@ -187,13 +193,16 @@ Response:
 ```json
 {
   "default_srcid": 9998,
+  "intercept_net_msgs": 0,
   "send_ongoing": 0,
   "send_success": 1,
   "send_fail": 0,
   "rx_msg_valid": 0,
   "rx_msg_srcid": 1234,
+  "rx_msg_dstid": 9998,
   "rx_msg_calltype": 0,
   "rx_msg_format": 0,
+  "rx_msg_from_modem": 0,
   "rx_msg": "0042004500450052"
 }
 ```
