@@ -69,11 +69,13 @@ Response:
 ### checkauth.cgi
 
 Checks the validity of the given token and digest. *success* is 1 if they are valid **and** the user has logged in previously. Also returns openSPOT's hostname and current IP address.
+*nopass* is 1 if openSPOT has no password set.
 
 Response:
 ```json
 {
   "success": 1,
+  "nopass": 0,
   "hostname": "openspot",
   "ip_address": "192.168.3.99"
 }
