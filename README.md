@@ -866,7 +866,7 @@ Response:
 }
 ```
 
-### modempacket.cgi
+### modemtdma.cgi
 
 If you want to change the current TDMA settings, you can POST a query to this CGI. *changed* is 1 if packet settings got changed. Returns currently active settings. *modem_init_delay_ms* is the time needed for the modem to calibrate and initialize.
 
