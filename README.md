@@ -930,6 +930,7 @@ Query (optional):
 ```json
 {
   "new_rssi_avg_sample_count": 5,
+  "new_bclo_dbm": -80,
   "new_high_gain_low_linearity": 0,
   "new_agc_auto": 0,
   "new_agc_low_threshold_dbm": -50,
@@ -944,6 +945,7 @@ Response:
   "changed": 1,
   "modem_init_delay_ms": 3500,
   "rssi_avg_sample_count": 5,
+  "bclo_dbm": -80,
   "high_gain_low_linearity": 0,
   "agc_auto": 0,
   "agc_low_threshold_dbm": -50,
