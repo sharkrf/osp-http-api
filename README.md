@@ -589,6 +589,33 @@ Response:
 }
 ```
 
+### cpsettings.cgi
+
+If you want to change config profile settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+*reboot* is 1 if the active config profile has been changed and openSPOT is rebooting.
+*active_cp_initialized* is 1 if the currently active config profile is initialized.
+The array *cp_names* contain each config profile's name.
+
+Query (optional):
+```json
+{
+  "new_active_cp": 0,
+  "new_active_cp_name": "default",
+  "new_active_cp_copyto": 0
+}
+```
+Response:
+```json
+{
+  "changed": 1,
+  "reboot": 0,
+  "active_cp": 0,
+  "active_cp_hostname": "openspot",
+  "active_cp_initialized": 1,
+  "cp_names": ["default", "", "", "", ""]
+}
+```
+
 ### passwordsettings.cgi
 
 Allows you to change openSPOT's password. *changed* is 1 if the password has been changed.
@@ -771,6 +798,30 @@ Response:
   "dmr_demodmode": 0,
   "tx_frequency": 433450000,
   "tx_power_percent": 100
+}
+```
+
+### modemcwid.cgi
+
+If you want to change the modem CW ID settings, you can POST a query to this CGI. *changed* is 1 if settings got changed. Returns currently active settings.
+
+Query (optional):
+```json
+{
+  "new_cwid": "HA2NON",
+  "new_wpm": 25,
+  "new_interval_sec": 600,
+  "new_delay_sec": 30
+}
+```
+Response:
+```json
+{
+  "changed": 1,
+  "cwid": "HA2NON",
+  "wpm": 25,
+  "interval_sec": 600,
+  "delay_sec": 30
 }
 ```
 
