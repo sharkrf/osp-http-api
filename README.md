@@ -576,14 +576,19 @@ Response:
 
 ### info.cgi
 
-Allows you to query general info about the openSPOT box. *blver* is the bootloader version. *uid* is the device unique ID in hexadecimal.
+Allows you to query general info about the openSPOT box.
+*blver* is the bootloader version. *uid* is the device unique ID in hexadecimal.
+*uptime* is in seconds. *locked_to_country* is set to the country's ISO code if there's a lock active on the current device.
 
 Response:
 ```json
 {
   "hwver": "1.0",
+  "locked_to_country": "",
   "swver": "0001",
+  "subver": "433",
   "blver": "0001",
+  "uptime": 123,
   "mac": "FE:28:00:00:00:FA",
   "uid": "abcdef"
 }
