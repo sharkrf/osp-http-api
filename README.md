@@ -1072,3 +1072,23 @@ Response:
 }
 ```
 
+### quickcall.cgi
+
+If you want to request a quick DMR call, you can POST a query to this CGI.
+
+Valid *call_type* values: 0 - group call, 1 - private call.
+
+Query (optional):
+```json
+{
+  "dst_id": 4000,
+  "call_type": 0,
+  "tdma_channel": 0
+}
+```
+Response:
+```json
+{
+  "success": 1
+}
+```
