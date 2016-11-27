@@ -621,6 +621,67 @@ Response:
 }
 ```
 
+### config-export.cgi
+
+If you want to export the active config profile settings, you can POST a query to this CGI.
+You can request settings in chunks. The number of available chunks is in *chunk_count*.
+Each chunk is represented in string of hexadecimal character pairs. The whole config's CRC
+is returned in *config_crc*. Note that *chunk* data in this example is truncated.
+
+Query:
+```json
+{
+  "chunk_nr": 0
+}
+```
+Response:
+```json
+{
+  "config_crc": "a9fd8832",
+  "chunk_count": 3,
+  "chunk_nr": 0,
+  "chunk": "982443abcdef"
+}
+```
+
+### config-import.cgi
+
+If you want to import the active config profile settings, you can POST a query to this CGI.
+*chunk_size* is the length which this CGI waits *chunk* data in string of hexadecimal character
+pairs. *chunk_count* is the total number of *chunks* needed for a successful import.
+*active_cp_hostname* is the hostname of openSPOT. This is always returned because it may be
+changed after a successful import - in this case the caller knows on what address openSPOT
+will start listening on after the device reboots. Note that *chunk* data in this example is
+truncated. *status* can be the following:
+
+- 0: CONFIGAREA_IMPORT_STATUS_INITIALIZED
+- 1: CONFIGAREA_IMPORT_STATUS_NEED_MORE_CHUNKS
+- 2: CONFIGAREA_IMPORT_STATUS_SUCCESS
+- 3: CONFIGAREA_IMPORT_STATUS_STRUCT_VERSION_MISMATCH
+- 4: CONFIGAREA_IMPORT_STATUS_CRC_ERR
+- 5: CONFIGAREA_IMPORT_STATUS_INVALID_FILE
+- 6: CONFIGAREA_IMPORT_STATUS_FAIL
+
+*status* will always be 0 when calling this CGI without query parameters.
+
+Query (optional):
+```json
+{
+  "config_crc": "a9fd8832",
+  "chunk_nr": 0,
+  "chunk": "982443abcdef"
+}
+```
+Response:
+```json
+{
+  "chunk_size": 1024,
+  "chunk_count": 3,
+  "active_cp_hostname": "openspot",
+  "status": 0
+}
+```
+
 ### passwordsettings.cgi
 
 Allows you to change openSPOT's password. *changed* is 1 if the password has been changed.
