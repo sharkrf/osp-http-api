@@ -296,6 +296,8 @@ If you want to change the Homebrew connector settings, you can POST a query to t
 
 Valid *autocon_calltype*, *c4fm_dstcalltype* and *reroute_calltype* values: 0 - group call, 1 - private call.
 
+For more information about the MMDVM options field, see [this](https://github.com/g4klx/MMDVMHost/blob/master/DMRplus_startup_options.md) description.
+
 Query (optional):
 ```json
 {
@@ -303,6 +305,8 @@ Query (optional):
   "new_tx_freq": 436000000,
   "new_server_host": "",
   "new_port": 62030,
+  "new_mmdvm_mode": 0,
+  "new_mmdvm_options": "",
   "new_callsign": "",
   "new_password": "",
   "new_repeater_id": 901234,
@@ -328,6 +332,8 @@ Response:
   "changed": 1,
   "server_host": "",
   "port": 62030,
+  "mmdvm_mode": 0,
+  "mmdvm_options": "",
   "callsign": "",
   "password": "",
   "repeater_id": 901234,
