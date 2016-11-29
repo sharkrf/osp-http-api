@@ -295,6 +295,7 @@ Response:
 If you want to change the Homebrew connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
 
 Valid *autocon_calltype*, *c4fm_dstcalltype* and *reroute_calltype* values: 0 - group call, 1 - private call.
+*advmispkth* is the advanced missing packet handling.
 
 For more information about the MMDVM options field, see [this](https://github.com/g4klx/MMDVMHost/blob/master/DMRplus_startup_options.md) description.
 
@@ -320,6 +321,7 @@ Query (optional):
   "new_c4fm_dstcalltype": 0,
   "new_reroute_id": 9990,
   "new_reroute_calltype": 1,
+  "new_advmispkth": 1,
   "new_keepalive_interval_sec": 5,
   "new_rx_timeout_sec": 30
 }
@@ -346,6 +348,7 @@ Response:
   "c4fm_dstcalltype": 0,
   "reroute_id": 9990,
   "reroute_calltype": 1,
+  "advmispkth": 1,
   "keepalive_interval_sec": 5,
   "rx_timeout_sec": 30
 }
