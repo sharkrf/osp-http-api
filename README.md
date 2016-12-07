@@ -774,9 +774,13 @@ Response:
 
 If you want to change general DMR settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
 
+If *no_inband* is set to 1, in-band DMR data like GPS pos. or talker alias will not be sent to the modem.
+
 Query (optional):
 ```json
 {
+  "new_force_talker_alias": "abcd",
+  "new_no_inband": 0,
   "new_cc": 1,
   "new_echo_id": 9999,
   "new_default_c4fm_id": 0,
@@ -787,6 +791,8 @@ Response:
 ```json
 {
   "changed": 1,
+  "force_talker_alias": "abcd",
+  "no_inband": 0,
   "cc": 1,
   "echo_id": 9999,
   "default_c4fm_id": 0,
