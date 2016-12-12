@@ -825,14 +825,16 @@ If you want to change general C4FM settings, you can POST a query to this CGI. *
 Query (optional):
 ```json
 {
-  "new_dtmf_automute_cmds": 1
+  "new_dtmf_automute_cmds": 1,
+  "new_transmit_rx_confirmation": 1
 }
 ```
 Response:
 ```json
 {
   "changed": 1,
-  "dtmf_automute_cmds": 1
+  "dtmf_automute_cmds": 1,
+  "transmit_rx_confirmation": 1
 }
 ```
 
