@@ -746,6 +746,24 @@ Response:
 }
 ```
 
+### spksettings.cgi
+
+If you want to change voice announcement settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+
+Query (optional):
+```json
+{
+  "new_enabled": 1,
+}
+```
+Response:
+```json
+{
+  "changed": 1,
+  "enabled": 1
+}
+```
+
 ### locationsettings.cgi
 
 If you want to change location settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
