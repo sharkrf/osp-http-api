@@ -771,8 +771,8 @@ Response:
   "host": "spk.sharkrf.com",
   "port": 65200,
   "src_dmr_id": 9998,
-  "prof_id": 9000,
-  "con_id": 9998
+  "prof_dmr_id": 9000,
+  "con_dmr_id": 9998
 }
 ```
 
