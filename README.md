@@ -754,13 +754,25 @@ Query (optional):
 ```json
 {
   "new_enabled": 1,
+  "new_remote_only": 0,
+  "new_host": "spk.sharkrf.com",
+  "new_port": 65200,
+  "new_src_dmr_id": 9998,
+  "new_prof_id": 9000,
+  "new_con_id": 9998
 }
 ```
 Response:
 ```json
 {
   "changed": 1,
-  "enabled": 1
+  "enabled": 1,
+  "remote_only": 0,
+  "host": "spk.sharkrf.com",
+  "port": 65200,
+  "src_dmr_id": 9998,
+  "prof_id": 9000,
+  "con_id": 9998
 }
 ```
 
