@@ -875,16 +875,24 @@ If you want to change callsign/CCS7 ID lock settings, you can POST a query to th
 Query (optional):
 ```json
 {
-  "new_id": 2161005,
-  "new_callsign": "HA2NON"
+  "new_id1": 2161005,
+  "new_callsign1": "HA2NON",
+  "new_id2": 2161006,
+  "new_callsign2": "HG1MA",
+  "new_id3": 0,
+  "new_callsign3": ""
 }
 ```
 Response:
 ```json
 {
   "changed": 0,
-  "id": 0,
-  "callsign": ""
+  "id1": 2161005,
+  "callsign1": "HA2NON",
+  "id2": 2161006,
+  "callsign2": "HG1MA",
+  "id3": 0,
+  "callsign3": ""
 }
 ```
 
