@@ -762,6 +762,7 @@ Query (optional):
 ```json
 {
   "new_enabled": 1,
+  "new_shortbm": 0,
   "new_remote_only": 0,
   "new_host": "spk.sharkrf.com",
   "new_port": 65200,
@@ -775,6 +776,7 @@ Response:
 {
   "changed": 1,
   "enabled": 1,
+  "shortbm": 0,
   "remote_only": 0,
   "host": "spk.sharkrf.com",
   "port": 65200,
