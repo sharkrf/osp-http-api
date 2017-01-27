@@ -4,7 +4,13 @@ Note that this repository is always updated according to the beta openSPOT firmw
 
 The HTTP API uses JSON queries and replies.
 
-All queries except gettok.cgi must include a valid token and digest. To acquire these, your application must complete the login process. These two keys are not represented in the JSON structure descriptions below. Token/digest pairs stay valid for 3600 seconds after the last valid query.
+All queries except gettok.cgi, ip.cgi and checkauth.cgi must include a valid JWT
+([JSON Web Token](https://jwt.io)).
+The JWT should be included in the HTTP header as Authorization: Bearer.
+
+To acquire a JWT, your application must complete the login process. The JWT stays valid for
+3600 seconds after the last valid query. If the supplied JWT is not valid, openSPOT responds
+with 403 Forbidden header.
 
 ## Login process
 
@@ -15,32 +21,38 @@ All queries except gettok.cgi must include a valid token and digest. To acquire 
 
 Example login process with example JSON queries:
 
-- POST **gettok.cgi** an empty query. Response:
+- GET **gettok.cgi** an empty query. Response:
 	```json
 	{
-  	"token": "1f9a8b7c"
+	  "token": "1f9a8b7c"
 	}
 	```
+
 - Our password is *"passw0rd"*. So we concatenate the token and the password, and hash it:
 	```bash
 	sha256("1f9a8b7cpassw0rd")
 	```
-- This gives us the digest *"2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"*
-- Now we call **login.cgi** with this JSON query:
+	This gives us the digest *"2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"*
+
+- Now we POST **login.cgi** this JSON:
 	```json
 	{
-  	"token": "1f9a8b7c",
-  	"digest": "2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"
+	  "token": "1f9a8b7c",
+	  "digest": "2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"
 	}
 	```
+
 	The reply will be:
+
 	```json
 	{
-  	"success": 1,
-  	"hostname": "openspot"
+	  "hostname": "openspot",
+	  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMjljODQwZSJ9.r3Oom8qVEAd1ceMMWibrMNsgu0DPgz-IG13MAzB-o5s"
 	}
 	```
-- Now we are logged in and can call all API interfaces with the *token* and *digest*.
+	If the password is not matching, openSPOT will respond with a 401 Unauthorized header.
+
+- Now we are logged in and can call all API interfaces with the acquired JWT.
 
 ## API interfaces
 
@@ -57,7 +69,8 @@ Response:
 
 ### gettok.cgi
 
-Doesn't take any parameters from a query. Returns the session token, which is a hexadecimal uint32_t (8 ASCII characters).
+Doesn't take any parameters from a query. Returns the session token, which is
+a hexadecimal uint32_t (8 ASCII characters).
 
 Response:
 ```json
@@ -68,8 +81,9 @@ Response:
 
 ### checkauth.cgi
 
-Checks the validity of the given token and digest. *success* is 1 if they are valid **and** the user has logged in previously. Also returns openSPOT's hostname and current IP address.
-*nopass* is 1 if openSPOT has no password set.
+Checks the validity of the supplied JWT. *success* is 1 if it's valid **and**
+the user has logged in previously. Also returns openSPOT's hostname and current
+IP address. *nopass* is 1 if openSPOT has no password set.
 
 Response:
 ```json
@@ -83,44 +97,43 @@ Response:
 
 ### login.cgi
 
-Logs in the user if the given token and digest is valid. *success* is 1 if they are valid. Also returns openSPOT's hostname.
+Logs in the user if the given token and digest is valid. Returns openSPOT's hostname
+and the JWT.
 
 Response:
 ```json
 {
-  "success": 1,
-  "hostname": "openspot"
+  "hostname": "openspot",
+  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMjljODQwZSJ9.r3Oom8qVEAd1ceMMWibrMNsgu0DPgz-IG13MAzB-o5s"
 }
 ```
 
 ### logout.cgi
 
-Logs out the user if the given token and digest is valid **and** the user has logged in previously. *success* is 1 if logout was successful.
+Logs out the user.
 
 Response:
 ```json
-{
-  "success": 1
-}
+{}
 ```
 
 ### reboot.cgi
 
-Checks the validity of the given token and digest, and triggers a reboot. *success* is 1 if token and digest are valid **and** the user has logged in previously.
+Triggers a reboot.
 
 If *reset_config* is set to 1 in the query, it resets the default configuration after rebooting.
+If *bootloader* is 1, it reboots the unit to the bootloader.
 
 Query (optional):
 ```json
 {
-  "reset_config": 1
+  "reset_config": 1,
+  "bootloader": 1
 }
 ```
 Response:
 ```json
-{
-  "success": 1
-}
+{}
 ```
 
 ### status.cgi
@@ -137,11 +150,33 @@ Returns openSPOT's current status.
   - 6: Modem HW/SW version mismatch
   - 7: Modem firmware upgrade in progress
 
-**rssi_tc0_values_dbm** and **rssi_tc1_values_dbm** contain RSSI values since the last call of *status.cgi*. If the current modem mode is non-TDMA, then ignore *rssi_tc1_values_dbm*.
+**rssi_tc0_values_dbm** and **rssi_tc1_values_dbm** contain RSSI values since
+the last call of *status.cgi*. If the current modem mode is non-TDMA, then
+ignore *rssi_tc1_values_dbm*.
 
-**dejitter_buf_tc0_pkts** and **dejitter_buf_tc1_pkts** contain dejitter buffer packet count values since the last call of *status.cgi*. If the current modem mode is non-TDMA, then ignore *dejitter_buf_tc1_pkts*.
+**dejitter_buf_tc0_pkts** and **dejitter_buf_tc1_pkts** contain dejitter buffer
+packet count values since the last call of *status.cgi*. If the current modem
+mode is non-TDMA, then ignore *dejitter_buf_tc1_pkts*.
+
+**ber_tc0_values** and **ber_tc1_values** contain the count of erroneous bits
+since the last call of *status.cgi*. If the current modem mode is non-TDMA,
+then ignore *ber_tc1_values*.
 
 The packet and byte UDP traffic counters are monotonically increasing 32 bit values.
+
+**callinfo** contains an array of call info structures. The first element of the
+structure is the destination callsign (or DMR ID as a string), the second element
+is the source callsign, and the third is the callinfo struct type. This is a 8-bit
+value, the meaning of the bits:
+
+- 0th bit (LSB): 0 - voice call, 1 - data call
+- 1st bit: 0 - call from net, 1 - call from modem/openSPOT
+- 2nd bit: 0 - group call, 1 - private call
+- 3rd bit: 0 - call end, 1 - call start
+- 4th bit: 1 - call started with late entry
+- 5th bit: 1 - call ended with timeout
+- 6th bit: 0 - TS1, 1 - TS2
+- 7th bit (MSB): 1 - received a talker alias
 
 Response:
 ```json
@@ -158,25 +193,29 @@ Response:
   "rx_bytes": 14421,
   "tx_pkts": 32,
   "tx_bytes": 14421,
-  "connected_to": "DCS001 A"
+  "connected_to": "DCS001 A",
+  "callinfo": [{"9","2161005",0}, {"9","2161005",8}]
 }
 ```
 
 ### status-dmrsms.cgi
 
-Returns current status of DMR SMS sending, if the modem is in DMR mode. Otherwise it'll return with 400 Bad Request.
-Also it handles SMS sending.
+Returns current status of DMR SMS sending, if the modem is in DMR mode.
+Otherwise it returns 400 Bad Request. It also handles SMS sending.
 
 Call types: 0 - private, 1 - group.
 Format IDs: 0 - ETSI, 1 - UDP, 2 - UDP/Chinese. See user manual for more info.
 If a new message is received, *rx_msg_valid* is 1.
 Setting a new *send_srcid* in the query overwrites the *default_srcid*.
 If *send_to_modem* is 0, the SMS will be sent to the currently active connector.
-If *intercept_net_msgs* is 1, then SMS messages coming from the network to the *default_srcid* will be processed.
-If *only_save* is 1, the SMS will not get sent, only the *send_srcid* and *intercept_net* settings will be stored.
+If *intercept_net_msgs* is 1, then SMS messages coming from the network to
+the *default_srcid* will be processed.
+If *only_save* is 1, the SMS will not get sent, only the *send_srcid* and
+*intercept_net* settings will be stored.
 
 Messages are in hexadecimal UTF16BE format. Example: "BEER" = "0042004500450052"
-Max. message length which can be sent is currently 75 UTF16BE characters (150 hex char pairs).
+Max. message length which can be sent is currently 75 UTF16BE characters (150
+hex char pairs).
 
 Query (optional):
 ```json
@@ -213,7 +252,8 @@ Response:
 
 ### status-srfipconnserver.cgi
 
-Returns the SharkRF IP Connector Server's current status, if it's the active connector. Otherwise it'll return with 400 Bad Request.
+Returns the SharkRF IP Connector Server's current status, if it's the
+active connector. Otherwise it'll return 400 Bad Request.
 
 **client_connected** is 1 if a client is connected.
 
@@ -228,7 +268,7 @@ Response:
 
 ### connector.cgi
 
-If you want to change openSPOT's active connector, you can POST a query to this CGI. *changed* is 1 if the active connector is changed.
+openSPOT's active connector query (GET)/change (POST).
 
 Valid connector IDs:
 
@@ -253,14 +293,14 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 0,
   "active_connector": 0
 }
 ```
 
 ### dmrplussettings.cgi
 
-If you want to change the DMRplus connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+DMRplus connector settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -278,7 +318,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "rx_freq": 436000000,
   "tx_freq": 436000000,
   "server_host": "",
@@ -292,12 +331,15 @@ Response:
 
 ### homebrewsettings.cgi
 
-If you want to change the Homebrew connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+Homebrew connector settings query (GET)/change (POST). Returns currently
+active settings.
 
-Valid *autocon_calltype*, *c4fm_dstcalltype* and *reroute_calltype* values: 0 - group call, 1 - private call.
+Valid *autocon_calltype*, *c4fm_dstcalltype* and *reroute_calltype* values:
+0 - group call, 1 - private call.
 *advmispkth* is the advanced missing packet handling.
 
-For more information about the MMDVM options field, see [this](https://github.com/g4klx/MMDVMHost/blob/master/DMRplus_startup_options.md) description.
+For more information about the MMDVM options field, see
+[this](https://github.com/g4klx/MMDVMHost/blob/master/DMRplus_startup_options.md) description.
 
 Query (optional):
 ```json
@@ -335,7 +377,6 @@ Response:
 {
   "rx_freq": 436000000,
   "tx_freq": 436000000,
-  "changed": 1,
   "server_host": "",
   "port": 62030,
   "mmdvm_mode": 0,
@@ -364,7 +405,8 @@ Response:
 
 ### dcsxlxsettings.cgi
 
-If you want to change the DCS/XLX connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+DCS/XLX connector settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -384,7 +426,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "rx_freq": 436000000,
   "tx_freq": 436000000,
   "server_host": "",
@@ -400,7 +441,8 @@ Response:
 
 ### refxrfsettings.cgi
 
-If you want to change the REF/XRF connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+REF/XRF connector settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -420,7 +462,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "rx_freq": 436000000,
   "tx_freq": 436000000,
   "server_host": "",
@@ -436,7 +477,8 @@ Response:
 
 ### fcssettings.cgi
 
-If you want to change the FCS connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+FCS connector settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -456,7 +498,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "rx_freq": 436000000,
   "tx_freq": 436000000,
   "server_host": "fcs001.xreflector.net",
@@ -472,7 +513,8 @@ Response:
 
 ### ysfrefsettings.cgi
 
-If you want to change the YSFReflector connector settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+YSFReflector connector settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -489,7 +531,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "rx_freq": 436000000,
   "tx_freq": 436000000,
   "server_host": "",
@@ -502,7 +543,8 @@ Response:
 
 ### srfipconnclientsettings.cgi
 
-If you want to change the SharkRF IP Connector Client settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+SharkRF IP Connector Client settings query (GET)/change (POST).
+Returns currently active settings.
 
 Query (optional):
 ```json
@@ -521,7 +563,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "rx_freq": 436000000,
   "tx_freq": 436000000,
   "server_host": "192.168.3.120",
@@ -536,7 +577,8 @@ Response:
 
 ### srfipconnserversettings.cgi
 
-If you want to change the SharkRF IP Connector Server settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+SharkRF IP Connector Server settings query (GET)/change (POST).
+Returns currently active settings.
 
 Query (optional):
 ```json
@@ -551,7 +593,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "rx_freq": 436000000,
   "tx_freq": 436000000,
   "port": 65100,
@@ -562,7 +603,10 @@ Response:
 
 ### dmrautocal.cgi
 
-You can periodically query this CGI to get current DMR demodulation mode auto calibration status. Also you can change this connector's modem RX/TX frequencies. When the frequencies are changed, the connector is restarted.
+You can periodically query (GET) this CGI to get current DMR
+demodulation mode auto calibration status. Also you can change
+this connector's modem RX/TX frequencies. When the frequencies
+are changed, the connector is restarted.
 
 State can be:
 
@@ -571,7 +615,8 @@ State can be:
 - 2: finished, result available
 - 3: modem is not in DMR mode
 
-Progress is in percent. Result is the auto calibrated demodulation mode (0 - A, 1 - B, 2 - C, etc.)
+Progress is in percent. Result is the auto calibrated demodulation
+mode (0 - A, 1 - B, 2 - C, etc.)
 
 Query (optional):
 ```json
@@ -593,9 +638,11 @@ Response:
 
 ### info.cgi
 
-Allows you to query general info about the openSPOT box.
-*blver* is the bootloader version. *uid* is the device unique ID in hexadecimal.
-*uptime* is in seconds. *locked_to_country* is set to the country's ISO code if there's a lock active on the current device.
+Allows you to query (GET) general info about the device.
+*blver* is the bootloader version. *uid* is the device unique ID
+in hexadecimal.
+*uptime* is in seconds. *locked_to_country* is set to the country's
+ISO code if there's a lock active on the current device.
 
 Response:
 ```json
@@ -613,10 +660,12 @@ Response:
 
 ### cpsettings.cgi
 
-If you want to change config profile settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
-*reboot* is 1 if the active config profile has been changed and openSPOT is rebooting.
-*active_cp_initialized* is 1 if the currently active config profile is initialized.
-The array *cp_names* contain each config profile's name.
+Config profile settings query (GET)/change (POST). Returns currently
+active settings.
+*reboot* is 1 if the active config profile has been changed and openSPOT
+is rebooting. *active_cp_initialized* is 1 if the currently active config
+profile is initialized. The array *cp_names* contain each config profile's
+name.
 
 Query (optional):
 ```json
@@ -629,7 +678,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "reboot": 0,
   "active_cp": 0,
   "active_cp_hostname": "openspot",
@@ -640,12 +688,14 @@ Response:
 
 ### config-export.cgi
 
-If you want to export the active config profile settings, you can POST a query to this CGI.
-You can request settings in chunks. The number of available chunks is in *chunk_count*.
-Each chunk is represented in string of hexadecimal character pairs. The whole config's CRC
-is returned in *config_crc*. Note that *chunk* data in this example is truncated.
+If you want to export the active config profile settings, you can POST
+a query to this CGI. You can request settings in chunks. The number of
+available chunks is in *chunk_count* (this can also be requested with a
+GET query). Each chunk is represented in string of hexadecimal character
+pairs. The whole config's CRC is returned in *config_crc*. Note that
+*chunk* data in this example is truncated.
 
-Query:
+Query (optional):
 ```json
 {
   "chunk_nr": 0
@@ -663,12 +713,14 @@ Response:
 
 ### config-import.cgi
 
-If you want to import the active config profile settings, you can POST a query to this CGI.
-*chunk_size* is the length which this CGI waits *chunk* data in string of hexadecimal character
-pairs. *chunk_count* is the total number of *chunks* needed for a successful import.
-*active_cp_hostname* is the hostname of openSPOT. This is always returned because it may be
-changed after a successful import - in this case the caller knows on what address openSPOT
-will start listening on after the device reboots. Note that *chunk* data in this example is
+If you want to import the active config profile settings, you can POST
+a query to this CGI. *chunk_size* is the length which this CGI waits
+*chunk* data in string of hexadecimal character pairs. *chunk_count*
+is the total number of *chunks* needed for a successful import.
+*active_cp_hostname* is the hostname of openSPOT. This is always
+returned because it may be changed after a successful import - in this
+case the caller knows on what address openSPOT will start listening on
+after the device reboots. Note that *chunk* data in this example is
 truncated. *status* can be the following:
 
 - 0: CONFIGAREA_IMPORT_STATUS_INITIALIZED
@@ -701,7 +753,7 @@ Response:
 
 ### passwordsettings.cgi
 
-Allows you to change openSPOT's password. *changed* is 1 if the password has been changed.
+Allows you to change openSPOT's password.
 
 Query:
 ```json
@@ -711,14 +763,12 @@ Query:
 ```
 Response:
 ```json
-{
-  "changed": 1
-}
+{}
 ```
 
 ### netsettings.cgi
 
-If you want to change the network settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+Network settings query (GET)/change (POST). Returns currently active settings.
 
 **ip_config_mode** can be:
   - 0: DHCP
@@ -742,7 +792,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "ip_config_mode": 0,
   "hostname": "openspot",
   "static_ip": "192.168.1.99",
@@ -756,7 +805,8 @@ Response:
 
 ### spksettings.cgi
 
-If you want to change voice announcement settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+Voice announcement settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -774,7 +824,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "enabled": 1,
   "shortbm": 0,
   "remote_only": 0,
@@ -788,7 +837,8 @@ Response:
 
 ### locationsettings.cgi
 
-If you want to change location settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+Location settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -802,7 +852,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "latitude": "0.0",
   "longitude": "0.0",
   "height_agl": 0,
@@ -812,9 +861,11 @@ Response:
 
 ### dmrsettings.cgi
 
-If you want to change general DMR settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+General DMR settings query (GET)/change (POST). Returns currently
+active settings.
 
-If *no_inband* is set to 1, in-band DMR data like GPS pos. or talker alias will not be sent to the modem.
+If *no_inband* is set to 1, in-band DMR data like GPS pos. or talker alias
+will not be sent to the modem.
 
 Query (optional):
 ```json
@@ -830,7 +881,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "force_talker_alias": "abcd",
   "no_inband": 0,
   "cc": 1,
@@ -842,7 +892,8 @@ Response:
 
 ### dstarsettings.cgi
 
-If you want to change general D-STAR settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+General D-STAR settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -853,14 +904,14 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "echo_callsign": "       E"
 }
 ```
 
 ### c4fmsettings.cgi
 
-If you want to change general C4FM settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+General C4FM settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -872,7 +923,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "dtmf_automute_cmds": 1,
   "transmit_rx_confirmation": 1
 }
@@ -880,7 +930,8 @@ Response:
 
 ### locksettings.cgi
 
-If you want to change callsign/CCS7 ID lock settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings.
+Callsign/CCS7 ID lock settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -896,7 +947,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 0,
   "id1": 2161005,
   "callsign1": "HA2NON",
   "id2": 2161006,
@@ -908,7 +958,9 @@ Response:
 
 ### modemfreq.cgi
 
-If you want to change the current RX, TX frequency or TX power without reinitializing the modem, you can POST a query to this CGI. *changed* is 1 if the frequency got changed. Returns currently active settings.
+If you want to change the current RX, TX frequency or TX power
+without reinitializing the modem, you can POST a query to this CGI.
+Returns currently active settings.
 
 DMR demodulation mode values: 0 - A, 1 - B, 2 - C etc.
 
@@ -924,7 +976,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "rx_frequency": 433450000,
   "dmr_demodmode": 0,
   "tx_frequency": 433450000,
@@ -934,7 +985,8 @@ Response:
 
 ### modemcwid.cgi
 
-If you want to change the modem CW ID settings, you can POST a query to this CGI. *changed* is 1 if settings got changed. Returns currently active settings.
+Modem CW ID settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
@@ -948,7 +1000,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "cwid": "HA2NON",
   "wpm": 25,
   "interval_sec": 600,
@@ -958,7 +1009,9 @@ Response:
 
 ### modemmode.cgi
 
-If you want to change the current modem mode, you can POST a query to this CGI. *changed* is 1 if the mode got changed. Returns currently active settings. *modem_init_delay_ms* is the time needed for the modem to calibrate and initialize.
+Current modem mode query (GET)/change (POST). Returns currently
+active settings. *modem_init_delay_ms* is the time needed for
+the modem to calibrate and initialize.
 
 - **mode** can be:
   - 0: Idle
@@ -983,7 +1036,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "modem_init_delay_ms": 3500,
   "mode": 0,
   "submode": 0,
@@ -992,7 +1044,9 @@ Response:
 
 ### modemmodulation.cgi
 
-If you want to change the current modulation mode, you can POST a query to this CGI. *changed* is 1 if the modulation got changed. Returns currently active settings. *modem_init_delay_ms* is the time needed for the modem to calibrate and initialize.
+Modem modulation mode query (GET)/change (POST). Returns currently
+active settings. *modem_init_delay_ms* is the time needed for the
+modem to calibrate and initialize.
 
 - **modulation_mode** can be:
   - 0: 2FSK
@@ -1011,7 +1065,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "modem_init_delay_ms": 3500,
   "modulation_mode": 0,
   "bitrate": 9600,
@@ -1021,7 +1074,9 @@ Response:
 
 ### modempacket.cgi
 
-If you want to change the current packet settings, you can POST a query to this CGI. *changed* is 1 if packet settings got changed. Returns currently active settings. *modem_init_delay_ms* is the time needed for the modem to calibrate and initialize.
+Modem packet settings query (GET)/change (POST). Returns currently
+active settings. *modem_init_delay_ms* is the time needed for the
+modem to calibrate and initialize.
 
 Query (optional):
 ```json
@@ -1037,7 +1092,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "modem_init_delay_ms": 3500,
   "packet_size_in_bits": 288,
   "sync_word_length_in_bits": 24,
@@ -1050,7 +1104,9 @@ Response:
 
 ### modemtdma.cgi
 
-If you want to change the current TDMA settings, you can POST a query to this CGI. *changed* is 1 if packet settings got changed. Returns currently active settings. *modem_init_delay_ms* is the time needed for the modem to calibrate and initialize.
+Modem TDMA settings query (GET)/change (POST). Returns currently
+active settings. *modem_init_delay_ms* is the time needed for the
+modem to calibrate and initialize.
 
 Query (optional):
 ```json
@@ -1064,7 +1120,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "modem_init_delay_ms": 3500,
   "tdma_enabled": 1,
   "tdma_pit_calibration_wait_for_packets_num": 2,
@@ -1075,7 +1130,9 @@ Response:
 
 ### modemcal.cgi
 
-If you want to change modem calibration settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings. *modem_init_delay_ms* is the time needed for the modem to calibrate and initialize.
+Modem calibration settings query (GET)/change (POST). Returns currently
+active settings. *modem_init_delay_ms* is the time needed for the modem
+to calibrate and initialize.
 
 Query (optional):
 ```json
@@ -1091,7 +1148,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "modem_init_delay_ms": 3500,
   "auto_calibration": 1,
   "recalibrate_temp_diff_in_celsius": 10,
@@ -1104,7 +1160,9 @@ Response:
 
 ### modemother.cgi
 
-If you want to change other modem settings, you can POST a query to this CGI. *changed* is 1 if at least one setting got changed. Returns currently active settings. *modem_init_delay_ms* is the time needed for the modem to calibrate and initialize.
+Other modem settings query (GET)/change (POST). Returns currently
+active settings. *modem_init_delay_ms* is the time needed for the
+modem to calibrate and initialize.
 
 *agc_auto* and *external_vco* fields are booleans.
 
@@ -1124,7 +1182,6 @@ Query (optional):
 Response:
 ```json
 {
-  "changed": 1,
   "modem_init_delay_ms": 3500,
   "rssi_avg_sample_count": 5,
   "bclo_dbm": -80,
@@ -1153,7 +1210,5 @@ Query (optional):
 ```
 Response:
 ```json
-{
-  "success": 1
-}
+{}
 ```
