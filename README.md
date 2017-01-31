@@ -166,7 +166,7 @@ The packet and byte UDP traffic counters are monotonically increasing 32 bit val
 
 **callinfo** contains an array of call info structures. The first element of the
 structure is the destination callsign (or DMR ID as a string), the second element
-is the source callsign, and the third is the callinfo struct type. This is a 8-bit
+is the source callsign, and the third is the callinfo struct type. This is a 16-bit
 value, the meaning of the bits:
 
 - 0th bit (LSB): 0 - voice call, 1 - data call
@@ -176,7 +176,11 @@ value, the meaning of the bits:
 - 4th bit: 1 - call started with late entry
 - 5th bit: 1 - call ended with timeout
 - 6th bit: 0 - TS1, 1 - TS2
-- 7th bit (MSB): 1 - received a talker alias
+- 7th bit: 1 - received a talker alias
+- 8th bit: 1 - C4FM DN (VD) mode 1, 0 - C4FM DN (VD) mode 2
+- 9th bit: 1 - C4FM wide voice mode, 0 - C4FM digital narrow mode
+
+Other bits are currently unused.
 
 Response:
 ```json
