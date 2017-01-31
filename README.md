@@ -179,6 +179,9 @@ value, the meaning of the bits:
 - 7th bit: 1 - received a talker alias
 - 8th bit: 1 - C4FM DN (VD) mode 1, 0 - C4FM DN (VD) mode 2
 - 9th bit: 1 - C4FM wide voice mode, 0 - C4FM digital narrow mode
+- 10th bit: 1 - DMR call
+- 11th bit: 1 - C4FM call
+- 12th bit: 1 - DSTAR call
 
 Other bits are currently unused.
 
@@ -198,7 +201,7 @@ Response:
   "tx_pkts": 32,
   "tx_bytes": 14421,
   "connected_to": "DCS001 A",
-  "callinfo": [{"9","2161005",0}, {"9","2161005",8}]
+  "callinfo": [{"9","2161005",0}, {"9","2161005",1032}]
 }
 ```
 
