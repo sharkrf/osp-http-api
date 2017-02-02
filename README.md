@@ -300,7 +300,7 @@ Query (optional):
 Response:
 ```json
 {
-  "active_connector": 0
+  "connector": 0
 }
 ```
 
