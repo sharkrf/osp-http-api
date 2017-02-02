@@ -294,7 +294,7 @@ Valid connector IDs:
 Query (optional):
 ```json
 {
-  "new_connector": 0
+  "connector": 0
 }
 ```
 Response:
@@ -312,14 +312,14 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_rx_freq": 436000000,
-  "new_tx_freq": 436000000,
-  "new_server_host": "",
-  "new_port": 8880,
-  "new_dmr_id": "",
-  "new_reflector_id": 0,
-  "new_keepalive_interval_sec": 1,
-  "new_rx_timeout_sec": 10
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "",
+  "port": 8880,
+  "dmr_id": "",
+  "reflector_id": 0,
+  "keepalive_interval_sec": 1,
+  "rx_timeout_sec": 10
 }
 ```
 Response:
@@ -350,31 +350,31 @@ For more information about the MMDVM options field, see
 Query (optional):
 ```json
 {
-  "new_rx_freq": 436000000,
-  "new_tx_freq": 436000000,
-  "new_server_host": "",
-  "new_port": 62030,
-  "new_mmdvm_mode": 0,
-  "new_mmdvm_options": "",
-  "new_callsign": "",
-  "new_password": "",
-  "new_b_server_host": "",
-  "new_b_port": 62030,
-  "new_b_password": "",
-  "new_b_toggle_timeout_sec": 60,
-  "new_repeater_id": 901234,
-  "new_autocon_id": 4771,
-  "new_autocon_calltype": 0,
-  "new_autocon_tdma_channel": 0,
-  "new_autocon_interval_sec": 500,
-  "new_autocon_discon": 0,
-  "new_dmo_tdma_channel": 0,
-  "new_c4fm_dstid": 9,
-  "new_c4fm_dstcalltype": 0,
-  "new_reroute_id": 9990,
-  "new_reroute_calltype": 1,
-  "new_keepalive_interval_sec": 5,
-  "new_rx_timeout_sec": 30
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "",
+  "port": 62030,
+  "mmdvm_mode": 0,
+  "mmdvm_options": "",
+  "callsign": "",
+  "password": "",
+  "b_server_host": "",
+  "b_port": 62030,
+  "b_password": "",
+  "b_toggle_timeout_sec": 60,
+  "repeater_id": 901234,
+  "autocon_id": 4771,
+  "autocon_calltype": 0,
+  "autocon_tdma_channel": 0,
+  "autocon_interval_sec": 500,
+  "autocon_discon": 0,
+  "dmo_tdma_channel": 0,
+  "c4fm_dstid": 9,
+  "c4fm_dstcalltype": 0,
+  "reroute_id": 9990,
+  "reroute_calltype": 1,
+  "keepalive_interval_sec": 5,
+  "rx_timeout_sec": 30
 }
 ```
 Response:
@@ -415,16 +415,16 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_rx_freq": 436000000,
-  "new_tx_freq": 436000000,
-  "new_server_host": "",
-  "new_port": 12345,
-  "new_ccs_port": 12345,
-  "new_callsign": "",
-  "new_local_module": "A",
-  "new_reflector": "DCS025",
-  "new_remote_module": "Z",
-  "new_rx_timeout_sec": 30
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "",
+  "port": 12345,
+  "ccs_port": 12345,
+  "callsign": "",
+  "local_module": "A",
+  "reflector": "DCS025",
+  "remote_module": "Z",
+  "rx_timeout_sec": 30
 }
 ```
 Response:
@@ -451,16 +451,16 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_rx_freq": 436000000,
-  "new_tx_freq": 436000000,
-  "new_server_host": "",
-  "new_port": 12345,
-  "new_ccs_port": 12345,
-  "new_callsign": "",
-  "new_local_module": "D",
-  "new_reflector": "REF001",
-  "new_remote_module": "C",
-  "new_rx_timeout_sec": 30
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "",
+  "port": 12345,
+  "ccs_port": 12345,
+  "callsign": "",
+  "local_module": "D",
+  "reflector": "REF001",
+  "remote_module": "C",
+  "rx_timeout_sec": 30
 }
 ```
 Response:
@@ -487,16 +487,16 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_server_host": "fcs001.xreflector.net",
-  "new_rx_freq": 436000000,
-  "new_tx_freq": 436000000,
-  "new_port": 12345,
-  "new_callsign": "",
-  "new_ccs7_id": 2161005,
-  "new_reflector": "FCS001",
-  "new_room_number": 25,
-  "new_keepalive_interval_sec": 1,
-  "new_rx_timeout_sec": 30
+  "server_host": "fcs001.xreflector.net",
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "port": 12345,
+  "callsign": "",
+  "ccs7_id": 2161005,
+  "reflector": "FCS001",
+  "room_number": 25,
+  "keepalive_interval_sec": 1,
+  "rx_timeout_sec": 30
 }
 ```
 Response:
@@ -523,13 +523,13 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_server_host": "",
-  "new_rx_freq": 436000000,
-  "new_tx_freq": 436000000,
-  "new_port": 42000,
-  "new_callsign": "",
-  "new_keepalive_interval_sec": 1,
-  "new_rx_timeout_sec": 30
+  "server_host": "",
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "port": 42000,
+  "callsign": "",
+  "keepalive_interval_sec": 1,
+  "rx_timeout_sec": 30
 }
 ```
 Response:
@@ -553,15 +553,15 @@ Returns currently active settings.
 Query (optional):
 ```json
 {
-  "new_rx_freq": 436000000,
-  "new_tx_freq": 436000000,
-  "new_server_host": "192.168.3.120",
-  "new_port": 65100,
-  "new_id": 2161005,
-  "new_password": "abcdefgh",
-  "new_callsign": "",
-  "new_keepalive_interval_sec": 5,
-  "new_rx_timeout_sec": 30
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "192.168.3.120",
+  "port": 65100,
+  "id": 2161005,
+  "password": "abcdefgh",
+  "callsign": "",
+  "keepalive_interval_sec": 5,
+  "rx_timeout_sec": 30
 }
 ```
 Response:
@@ -587,11 +587,11 @@ Returns currently active settings.
 Query (optional):
 ```json
 {
-  "new_rx_freq": 436000000,
-  "new_tx_freq": 436000000,
-  "new_port": 65100,
-  "new_password": "abcdefgh",
-  "new_rx_timeout_sec": 30
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "port": 65100,
+  "password": "abcdefgh",
+  "rx_timeout_sec": 30
 }
 ```
 Response:
@@ -625,8 +625,8 @@ mode (0 - A, 1 - B, 2 - C, etc.)
 Query (optional):
 ```json
 {
-  "new_rx_freq": 436000000,
-  "new_tx_freq": 436000000,
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
 }
 ```
 Response:
@@ -674,9 +674,9 @@ name.
 Query (optional):
 ```json
 {
-  "new_active_cp": 0,
-  "new_active_cp_name": "default",
-  "new_active_cp_copyto": 0
+  "active_cp": 0,
+  "active_cp_name": "default",
+  "active_cp_copyto": 0
 }
 ```
 Response:
@@ -762,7 +762,7 @@ Allows you to change openSPOT's password.
 Query:
 ```json
 {
-  "new_password": "openspot",
+  "password": "openspot",
 }
 ```
 Response:
@@ -783,14 +783,14 @@ Network settings query (GET)/change (POST). Returns currently active settings.
 Query (optional):
 ```json
 {
-  "new_ip_config_mode": 0,
-  "new_hostname": "openspot",
-  "new_static_ip": "192.168.1.99",
-  "new_static_mask": "255.255.255.0",
-  "new_static_gw": "192.168.1.1",
-  "new_static_dns1": "8.8.8.8",
-  "new_static_dns2": "8.8.4.4",
-  "new_dejitter_queue_msec": 130
+  "ip_config_mode": 0,
+  "hostname": "openspot",
+  "static_ip": "192.168.1.99",
+  "static_mask": "255.255.255.0",
+  "static_gw": "192.168.1.1",
+  "static_dns1": "8.8.8.8",
+  "static_dns2": "8.8.4.4",
+  "dejitter_queue_msec": 130
 }
 ```
 Response:
@@ -815,14 +815,14 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_enabled": 1,
-  "new_shortbm": 0,
-  "new_remote_only": 0,
-  "new_host": "spk.sharkrf.com",
-  "new_port": 65200,
-  "new_src_dmr_id": 9998,
-  "new_prof_id": 9000,
-  "new_con_id": 9998
+  "enabled": 1,
+  "shortbm": 0,
+  "remote_only": 0,
+  "host": "spk.sharkrf.com",
+  "port": 65200,
+  "src_dmr_id": 9998,
+  "prof_id": 9000,
+  "con_id": 9998
 }
 ```
 Response:
@@ -847,10 +847,10 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_latitude": "0.0",
-  "new_longitude": "0.0",
-  "new_height_agl": 0,
-  "new_name": ""
+  "latitude": "0.0",
+  "longitude": "0.0",
+  "height_agl": 0,
+  "name": ""
 }
 ```
 Response:
@@ -874,12 +874,12 @@ will not be sent to the modem.
 Query (optional):
 ```json
 {
-  "new_force_talker_alias": "abcd",
-  "new_no_inband": 0,
-  "new_cc": 1,
-  "new_echo_id": 9999,
-  "new_default_c4fm_id": 0,
-  "new_transmit_idle_in_idle_tx_tdma_channel": 1
+  "force_talker_alias": "abcd",
+  "no_inband": 0,
+  "cc": 1,
+  "echo_id": 9999,
+  "default_c4fm_id": 0,
+  "transmit_idle_in_idle_tx_tdma_channel": 1
 }
 ```
 Response:
@@ -902,7 +902,7 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_echo_callsign": "       E"
+  "echo_callsign": "       E"
 }
 ```
 Response:
@@ -920,8 +920,8 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_dtmf_automute_cmds": 1,
-  "new_transmit_rx_confirmation": 1
+  "dtmf_automute_cmds": 1,
+  "transmit_rx_confirmation": 1
 }
 ```
 Response:
@@ -940,12 +940,12 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_id1": 2161005,
-  "new_callsign1": "HA2NON",
-  "new_id2": 2161006,
-  "new_callsign2": "HG1MA",
-  "new_id3": 0,
-  "new_callsign3": ""
+  "id1": 2161005,
+  "callsign1": "HA2NON",
+  "id2": 2161006,
+  "callsign2": "HG1MA",
+  "id3": 0,
+  "callsign3": ""
 }
 ```
 Response:
@@ -971,10 +971,10 @@ DMR demodulation mode values: 0 - A, 1 - B, 2 - C etc.
 Query (optional):
 ```json
 {
-  "new_rx_frequency": 433450000,
-  "new_dmr_demodmode": 0,
-  "new_tx_frequency": 433450000,
-  "new_tx_power_percent": 100
+  "rx_frequency": 433450000,
+  "dmr_demodmode": 0,
+  "tx_frequency": 433450000,
+  "tx_power_percent": 100
 }
 ```
 Response:
@@ -995,10 +995,10 @@ active settings.
 Query (optional):
 ```json
 {
-  "new_cwid": "HA2NON",
-  "new_wpm": 25,
-  "new_interval_sec": 600,
-  "new_delay_sec": 30
+  "cwid": "HA2NON",
+  "wpm": 25,
+  "interval_sec": 600,
+  "delay_sec": 30
 }
 ```
 Response:
@@ -1033,8 +1033,8 @@ the modem to calibrate and initialize.
 Query (optional):
 ```json
 {
-  "new_mode": 0,
-  "new_submode": 0,
+  "mode": 0,
+  "submode": 0,
 }
 ```
 Response:
@@ -1061,9 +1061,9 @@ modem to calibrate and initialize.
 Query (optional):
 ```json
 {
-  "new_modulation_mode": 0,
-  "new_bitrate": 9600,
-  "new_inner_deviation_hz": 648
+  "modulation_mode": 0,
+  "bitrate": 9600,
+  "inner_deviation_hz": 648
 }
 ```
 Response:
@@ -1085,12 +1085,12 @@ modem to calibrate and initialize.
 Query (optional):
 ```json
 {
-  "new_packet_size_in_bits": 288,
-  "new_sync_word_length_in_bits": 24,
-  "new_sync_word_pos_in_packet_in_bits": 0,
-  "new_sync_word_count": 1,
-  "new_sync_word1": "4f5de8",
-  "new_sync_word2": "445566"
+  "packet_size_in_bits": 288,
+  "sync_word_length_in_bits": 24,
+  "sync_word_pos_in_packet_in_bits": 0,
+  "sync_word_count": 1,
+  "sync_word1": "4f5de8",
+  "sync_word2": "445566"
 }
 ```
 Response:
@@ -1115,10 +1115,10 @@ modem to calibrate and initialize.
 Query (optional):
 ```json
 {
-  "new_tdma_enabled": 1,
-  "new_tdma_pit_calibration_wait_for_packets_num": 2,
-  "new_tdma_pit_calibration_compensation_multiplier": 1.2,
-  "new_tdma_needed_sync_frames_for_tdma_channel_be_valid": 1
+  "tdma_enabled": 1,
+  "tdma_pit_calibration_wait_for_packets_num": 2,
+  "tdma_pit_calibration_compensation_multiplier": 1.2,
+  "tdma_needed_sync_frames_for_tdma_channel_be_valid": 1
 }
 ```
 Response:
@@ -1141,12 +1141,12 @@ to calibrate and initialize.
 Query (optional):
 ```json
 {
-  "new_auto_calibration": 1,
-  "new_recalibrate_temp_diff_in_celsius": 10,
-  "new_recalibrate_rf_ic_temp_diff_in_celsius": 10,
-  "new_temp_read_interval_in_sec": 10,
-  "new_temp_read_delay_in_sec_after_sync_lost": 10,
-  "new_quick_calibrate_delay_in_sec_after_sync_lost": 10
+  "auto_calibration": 1,
+  "recalibrate_temp_diff_in_celsius": 10,
+  "recalibrate_rf_ic_temp_diff_in_celsius": 10,
+  "temp_read_interval_in_sec": 10,
+  "temp_read_delay_in_sec_after_sync_lost": 10,
+  "quick_calibrate_delay_in_sec_after_sync_lost": 10
 }
 ```
 Response:
@@ -1173,14 +1173,14 @@ modem to calibrate and initialize.
 Query (optional):
 ```json
 {
-  "new_rssi_avg_sample_count": 5,
-  "new_bclo_dbm": -80,
-  "new_high_gain_low_linearity": 0,
-  "new_agc_auto": 0,
-  "new_agc_low_threshold_dbm": -50,
-  "new_agc_high_threshold_dbm": -80,
-  "new_external_vco": 0,
-  "new_call_hang_time_ms": 3000
+  "rssi_avg_sample_count": 5,
+  "bclo_dbm": -80,
+  "high_gain_low_linearity": 0,
+  "agc_auto": 0,
+  "agc_low_threshold_dbm": -50,
+  "agc_high_threshold_dbm": -80,
+  "external_vco": 0,
+  "call_hang_time_ms": 3000
 }
 ```
 Response:
