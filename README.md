@@ -915,20 +915,26 @@ Response:
 ### c4fmsettings.cgi
 
 General C4FM settings query (GET)/change (POST). Returns currently
-active settings.
+active settings. *dmr_def_cs* is the default C4FM callsign for DMR calls.
 
 Query (optional):
 ```json
 {
   "dtmf_automute_cmds": 1,
-  "transmit_rx_confirmation": 1
+  "dtmf_pcode": "*",
+  "dtmf_gcode": "#",
+  "transmit_rx_confirmation": 1,
+  "dmr_def_cs": ""
 }
 ```
 Response:
 ```json
 {
   "dtmf_automute_cmds": 1,
-  "transmit_rx_confirmation": 1
+  "dtmf_pcode": "*",
+  "dtmf_gcode": "#",
+  "transmit_rx_confirmation": 1,
+  "dmr_def_cs": ""
 }
 ```
 
