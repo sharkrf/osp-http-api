@@ -140,7 +140,7 @@ Response:
 
 Returns openSPOT's current status.
 
-**status** can be:
+*status* can be:
   - 0: Standby
   - 1: In call
   - 2: Connector not set
@@ -150,21 +150,21 @@ Returns openSPOT's current status.
   - 6: Modem HW/SW version mismatch
   - 7: Modem firmware upgrade in progress
 
-**rssi_tc0_values_dbm** and **rssi_tc1_values_dbm** contain RSSI values since
+*rssi_tc0_values_dbm* and *rssi_tc1_values_dbm* contain RSSI values since
 the last call of *status.cgi*. If the current modem mode is non-TDMA, then
 ignore *rssi_tc1_values_dbm*.
 
-**dejitter_buf_tc0_pkts** and **dejitter_buf_tc1_pkts** contain dejitter buffer
+*dejitter_buf_tc0_pkts* and *dejitter_buf_tc1_pkts* contain dejitter buffer
 packet count values since the last call of *status.cgi*. If the current modem
 mode is non-TDMA, then ignore *dejitter_buf_tc1_pkts*.
 
-**ber_tc0_values** and **ber_tc1_values** contain the count of erroneous bits
+*ber_tc0_values* and *ber_tc1_values* contain the count of erroneous bits
 since the last call of *status.cgi*. If the current modem mode is non-TDMA,
 then ignore *ber_tc1_values*.
 
 The packet and byte UDP traffic counters are monotonically increasing 32 bit values.
 
-**callinfo** contains an array of call info structures. The first element of the
+*callinfo* contains an array of call info structures. The first element of the
 structure is the destination callsign (or DMR ID as a string), the second element
 is the source callsign, and the third is the callinfo struct type. This is a 16-bit
 value, the meaning of the bits:
@@ -185,10 +185,20 @@ value, the meaning of the bits:
 
 Other bits are currently unused.
 
+*connector* is the active connector ID (see connector.cgi's description for
+connector ID names).
+
+*timeout_cp* is the config profile ID to switch on *timeout_cp_sec* timeout.
+*timeout_null_sec* is the null connector switch timeout.
+
 Response:
 ```json
 {
   "status": 0,
+  "connector": 2,
+  "timeout_cp": 0,
+  "timeout_cp_sec": 0,
+  "timeout_null_sec": 0,
   "rssi_tc0_values_dbm": [-60,-62,-65],
   "rssi_tc1_values_dbm": [-60,-62,-65],
   "dejitter_buf_tc0_pkts": [0, 1, 2],
@@ -262,7 +272,7 @@ Response:
 Returns the SharkRF IP Connector Server's current status, if it's the
 active connector. Otherwise it'll return 400 Bad Request.
 
-**client_connected** is 1 if a client is connected.
+*client_connected* is 1 if a client is connected.
 
 Response:
 ```json
@@ -301,6 +311,24 @@ Response:
 ```json
 {
   "connector": 0
+}
+```
+
+### connectorsettings.cgi
+
+Connector other settings query (GET)/change (POST). Returns currently
+active settings. *rxtimeout_sec* is the change to null connector timeout.
+
+Query (optional):
+```json
+{
+  "rxtimeout_sec": 0
+}
+```
+Response:
+```json
+{
+  "rxtimeout_sec": 0
 }
 ```
 
@@ -774,7 +802,7 @@ Response:
 
 Network settings query (GET)/change (POST). Returns currently active settings.
 
-**ip_config_mode** can be:
+*ip_config_mode* can be:
   - 0: DHCP
   - 1: DHCP with auto IP
   - 2: Auto IP
@@ -1023,14 +1051,14 @@ Current modem mode query (GET)/change (POST). Returns currently
 active settings. *modem_init_delay_ms* is the time needed for
 the modem to calibrate and initialize.
 
-- **mode** can be:
+- *mode* can be:
   - 0: Idle
   - 1: Raw
   - 2: DMR
   - 3: D-STAR
   - 4: C4FM
 
-- **submode** can be:
+- *submode* can be:
   - 0: No submode set
   - 1: DMR Hotspot
   - 2: DMR MS
@@ -1058,7 +1086,7 @@ Modem modulation mode query (GET)/change (POST). Returns currently
 active settings. *modem_init_delay_ms* is the time needed for the
 modem to calibrate and initialize.
 
-- **modulation_mode** can be:
+- *modulation_mode* can be:
   - 0: 2FSK
   - 1: 2FSK Raised Cosine
   - 2: 4FSK
