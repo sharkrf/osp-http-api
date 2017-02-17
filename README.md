@@ -476,6 +476,8 @@ Response:
 REF/XRF connector settings query (GET)/change (POST). Returns currently
 active settings.
 
+*allow_g* is the "always allow module G to modem" setting.
+
 Query (optional):
 ```json
 {
@@ -488,6 +490,7 @@ Query (optional):
   "local_module": "D",
   "reflector": "REF001",
   "remote_module": "C",
+  "allow_g": 1,
   "rx_timeout_sec": 30
 }
 ```
@@ -503,6 +506,7 @@ Response:
   "local_module": "D",
   "reflector": "REF001",
   "remote_module": "C",
+  "allow_g": 1,
   "rx_timeout_sec": 1
 }
 ```
