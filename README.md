@@ -188,6 +188,9 @@ Other bits are currently unused.
 *connector* is the active connector ID (see connector.cgi's description for
 connector ID names).
 
+*primary* is 1 if the primary server is used by the current connector, and
+it's 0 if the backup server is used.
+
 *timeout_cp* is the config profile ID to switch on *timeout_cp_sec* timeout.
 *timeout_null_sec* is the null connector switch timeout.
 
@@ -211,6 +214,7 @@ Response:
   "tx_pkts": 32,
   "tx_bytes": 14421,
   "connected_to": "DCS001 A",
+  "primary": 1,
   "callinfo": [{"9","2161005",0}, {"9","2161005",1032}]
 }
 ```
