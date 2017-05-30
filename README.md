@@ -826,6 +826,7 @@ Query (optional):
   "static_gw": "192.168.1.1",
   "static_dns1": "8.8.8.8",
   "static_dns2": "8.8.4.4",
+  "usestaticdns": 1,
   "dejitter_queue_msec": 130
 }
 ```
@@ -839,6 +840,7 @@ Response:
   "static_gw": "192.168.1.1",
   "static_dns1": "8.8.8.8",
   "static_dns2": "8.8.4.4",
+  "usestaticdns": 1,
   "dejitter_queue_msec": 130
 }
 ```
