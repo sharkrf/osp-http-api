@@ -957,6 +957,15 @@ Response:
 General C4FM settings query (GET)/change (POST). Returns currently
 active settings. *dmr_def_cs* is the default C4FM callsign for DMR calls.
 
+If *only_rx_with_sql_code_en* is 1, then the modem only processes C4FM
+calls with SQL code *only_rx_with_sql_code*.
+
+If *force_sql_code_to_modem_en* is 1, all C4FM frames sent to the
+modem will have SQL code *force_sql_code_to_modem* set.
+
+If *force_sql_code_to_net_en* is 1, all C4FM frames sent to the
+network will have SQL code *force_sql_code_to_net* set.
+
 Query (optional):
 ```json
 {
@@ -964,7 +973,13 @@ Query (optional):
   "dtmf_pcode": "*",
   "dtmf_gcode": "#",
   "transmit_rx_confirmation": 1,
-  "dmr_def_cs": ""
+  "dmr_def_cs": "",
+  "only_rx_with_sql_code_en": 0,
+  "only_rx_with_sql_code": 123,
+  "force_sql_code_to_modem_en": 0,
+  "force_sql_code_to_modem": 123,
+  "force_sql_code_to_net_en": 0,
+  "force_sql_code_to_net": 123
 }
 ```
 Response:
@@ -974,7 +989,13 @@ Response:
   "dtmf_pcode": "*",
   "dtmf_gcode": "#",
   "transmit_rx_confirmation": 1,
-  "dmr_def_cs": ""
+  "dmr_def_cs": "",
+  "only_rx_with_sql_code_en": 0,
+  "only_rx_with_sql_code": 123,
+  "force_sql_code_to_modem_en": 0,
+  "force_sql_code_to_modem": 123,
+  "force_sql_code_to_net_en": 0,
+  "force_sql_code_to_net": 123
 }
 ```
 
@@ -1010,7 +1031,8 @@ Response:
 
 If you want to change the current RX, TX frequency or TX power
 without reinitializing the modem, you can POST a query to this CGI.
-Returns currently active settings.
+Returns currently active settings. *modem_init_delay_ms* is the time needed
+for the modem to calibrate and initialize.
 
 DMR demodulation mode values: 0 - A, 1 - B, 2 - C etc.
 
@@ -1026,6 +1048,7 @@ Query (optional):
 Response:
 ```json
 {
+  "modem_init_delay_ms": 100,
   "rx_frequency": 433450000,
   "dmr_demodmode": 0,
   "tx_frequency": 433450000,
