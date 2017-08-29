@@ -676,6 +676,41 @@ Response:
 }
 ```
 
+### c4fmautocal.cgi
+
+You can periodically query (GET) this CGI to get current C4FM
+demodulation mode auto calibration status. Also you can change
+this connector's modem RX/TX frequencies. When the frequencies
+are changed, the connector is restarted.
+
+State can be:
+
+- 0: idle
+- 1: calibrating
+- 2: finished, result available
+- 3: modem is not in C4FM half deviation mode
+
+Progress is in percent. Result is the auto calibrated demodulation
+mode (0 - A, 1 - B, 2 - C, etc.)
+
+Query (optional):
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+}
+```
+Response:
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "state": 1,
+  "progress": 56,
+  "result": 2
+}
+```
+
 ### info.cgi
 
 Allows you to query (GET) general info about the device.
@@ -732,8 +767,9 @@ If you want to export the active config profile settings, you can POST
 a query to this CGI. You can request settings in chunks. The number of
 available chunks is in *chunk_count* (this can also be requested with a
 GET query). Each chunk is represented in string of hexadecimal character
-pairs. The whole config's CRC is returned in *config_crc*. Note that
-*chunk* data in this example is truncated.
+pairs. *config_size* is the count of valid config bytes in the file.
+The whole config's CRC is returned in *config_crc*. Note that *chunk*
+data in this example is truncated.
 
 Query (optional):
 ```json
@@ -744,6 +780,7 @@ Query (optional):
 Response:
 ```json
 {
+  "config_size": 1458,
   "config_crc": "a9fd8832",
   "chunk_count": 3,
   "chunk_nr": 0,
@@ -754,14 +791,18 @@ Response:
 ### config-import.cgi
 
 If you want to import the active config profile settings, you can POST
-a query to this CGI. *chunk_size* is the length which this CGI waits
-*chunk* data in string of hexadecimal character pairs. *chunk_count*
-is the total number of *chunks* needed for a successful import.
-*active_cp_hostname* is the hostname of openSPOT. This is always
-returned because it may be changed after a successful import - in this
-case the caller knows on what address openSPOT will start listening on
-after the device reboots. Note that *chunk* data in this example is
-truncated. *status* can be the following:
+a query to this CGI.
+
+*config_size* is the count of valid config bytes in the file.
+*chunk_size* is the length which this CGI waits *chunk* data in string
+of hexadecimal character pairs.
+*chunk_count* is the total number of *chunks* needed for a successful import.
+*active_cp_hostname* is the hostname of openSPOT. This is always returned
+because it may be changed after a successful import - in this case the caller
+knows on what address openSPOT will start listening on after the device
+reboots. Note that *chunk* data in this example is truncated.
+
+*status* can be the following:
 
 - 0: CONFIGAREA_IMPORT_STATUS_INITIALIZED
 - 1: CONFIGAREA_IMPORT_STATUS_NEED_MORE_CHUNKS
@@ -776,6 +817,7 @@ truncated. *status* can be the following:
 Query (optional):
 ```json
 {
+  "config_size": 1458,
   "config_crc": "a9fd8832",
   "chunk_nr": 0,
   "chunk": "982443abcdef"
@@ -1092,6 +1134,7 @@ the modem to calibrate and initialize.
   - 2: DMR
   - 3: D-STAR
   - 4: C4FM
+  - 5: C4FM half deviation mode
 
 - *submode* can be:
   - 0: No submode set
@@ -1103,7 +1146,7 @@ Query (optional):
 ```json
 {
   "mode": 0,
-  "submode": 0,
+  "submode": 0
 }
 ```
 Response:
@@ -1111,7 +1154,7 @@ Response:
 {
   "modem_init_delay_ms": 3500,
   "mode": 0,
-  "submode": 0,
+  "submode": 0
 }
 ```
 
