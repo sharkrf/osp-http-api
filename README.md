@@ -336,6 +336,26 @@ Response:
 }
 ```
 
+### nullsettings.cgi
+
+Null connector settings query (GET)/change (POST). Returns currently
+active settings.
+
+Query (optional):
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000
+}
+```
+Response:
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000
+}
+```
+
 ### dmrplussettings.cgi
 
 DMRplus connector settings query (GET)/change (POST). Returns currently
