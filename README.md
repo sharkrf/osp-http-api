@@ -1004,13 +1004,15 @@ active settings.
 Query (optional):
 ```json
 {
-  "echo_callsign": "       E"
+  "echo_callsign": "       E",
+  "transmit_rx_confirmation": 1
 }
 ```
 Response:
 ```json
 {
-  "echo_callsign": "       E"
+  "echo_callsign": "       E",
+  "transmit_rx_confirmation": 1
 }
 ```
 
