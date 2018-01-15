@@ -760,12 +760,15 @@ active settings.
 *reboot* is 1 if the active config profile has been changed and openSPOT
 is rebooting. *active_cp_initialized* is 1 if the currently active config
 profile is initialized. The array *cp_names* contain each config profile's
-name.
+name. *timeoutchange_cp* is the profile number which should be activated
+after *rxtimeout_sec* seconds.
 
 Query (optional):
 ```json
 {
   "active_cp": 0,
+  "timeoutchange_cp": 0,
+  "rxtimeout_sec": 0,
   "active_cp_name": "default",
   "active_cp_copyto": 0
 }
@@ -775,6 +778,8 @@ Response:
 {
   "reboot": 0,
   "active_cp": 0,
+  "timeoutchange_cp": 0,
+  "rxtimeout_sec": 0,
   "active_cp_hostname": "openspot",
   "active_cp_initialized": 1,
   "cp_names": ["default", "", "", "", ""]
