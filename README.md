@@ -949,11 +949,12 @@ Response:
 ### locationsettings.cgi
 
 Location settings query (GET)/change (POST). Returns currently
-active settings.
+active settings. Country is the country code (2 chars) or the string "global".
 
 Query (optional):
 ```json
 {
+  "country": "global",
   "latitude": "0.0",
   "longitude": "0.0",
   "height_agl": 0,
@@ -1354,4 +1355,22 @@ Query (optional):
 Response:
 ```json
 {}
+```
+
+### bmmsettings.cgi
+
+BrandMeister API settings query (GET)/change (POST). Returns currently
+active settings.
+
+Query (optional):
+```json
+{
+  "apikey": "abcdef"
+}
+```
+Response:
+```json
+{
+  "apikey": "abcdef"
+}
 ```
