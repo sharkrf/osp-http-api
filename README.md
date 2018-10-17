@@ -32,7 +32,7 @@ Example login process with example JSON queries:
 	```bash
 	sha256("1f9a8b7cpassw0rd")
 	```
-	This gives us the digest *"2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"*
+	This gives us the digest *"2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"* Should be lowercase only!
 
 - Now we POST **login.cgi** this JSON:
 	```json
