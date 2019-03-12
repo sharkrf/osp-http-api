@@ -22,62 +22,103 @@ with 403 Forbidden header.
 Example login process with example JSON queries:
 
 - GET **gettok.cgi** an empty query. Response:
-	```json
-	{
-	  "token": "1f9a8b7c"
-	}
-	```
+  ```json
+  {
+    "token": "1f9a8b7c"
+  }
+  ```
 
 - Our password is *"passw0rd"*. So we concatenate the token and the password, and hash it:
-	```bash
-	sha256("1f9a8b7cpassw0rd")
-	```
-	This gives us the digest *"2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"* Should be lowercase only!
+  ```bash
+  sha256("1f9a8b7cpassw0rd")
+  ```
+  This gives us the digest *"2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"* Should be lowercase only!
 
 - Now we POST **login.cgi** this JSON:
-	```json
-	{
-	  "token": "1f9a8b7c",
-	  "digest": "2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"
-	}
-	```
+  ```json
+  {
+    "token": "1f9a8b7c",
+    "digest": "2c476e1191ac5d38f72d9b00aca1c1a64aebe991de8c2c4806e413016844e6be"
+  }
+  ```
 
-	The reply will be:
+  The reply will be:
 
-	```json
-	{
-	  "hostname": "openspot",
-	  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMjljODQwZSJ9.r3Oom8qVEAd1ceMMWibrMNsgu0DPgz-IG13MAzB-o5s"
-	}
-	```
-	If the password is not matching, openSPOT will respond with a 401 Unauthorized header.
+  ```json
+  {
+    "hostname": "openspot",
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMjljODQwZSJ9.r3Oom8qVEAd1ceMMWibrMNsgu0DPgz-IG13MAzB-o5s"
+  }
+  ```
+  If the password is not matching, openSPOT will respond with a 401 Unauthorized header.
 
 - Now we are logged in and can call all API interfaces with the acquired JWT.
 
-## API interfaces
+## API Endpoints
 
-### ip.cgi
+### User/Session Management
+* [`checkauth.cgi`](#checkauthcgi) - Checks the validity of the supplied JWT.
+* [`gettok.cgi`](#gettokcgi) - Returns the current session token
+* [`login.cgi`](#logincgi) - Logs in the user
+* [`logout.cgi`](#logoutcgi) - Logs out the user
 
-Returns the IP address of openSPOT.
+### Device Management
+* [`info.cgi`](#infocgi) - Returns general device info (firmware versions, etc)
+* [`ip.cgi`](#ipcgi) - Returns the IP address of openSPOT
+* [`reboot.cgi`](#rebootcgi) - Reboot the openSPOT
+* [`status.cgi`](#statuscgi) - Returns openSPOT's current status
 
-Response:
-```json
-{
-  "ip": "192.168.3.106"
-}
-```
+### Config Profile Management
+* [`config-export.cgi`](#config-exportcgi) - Export the currently active config profile settings
+* [`config-import.cgi`](#config-importcgi) - Import a config profile
+* [`cpsettings.cgi`](#cpsettingscgi) - Manage config profiles
 
-### gettok.cgi
+### Other Settings
+* [`locationsettings.cgi`](#locationsettingscgi) - Manage the openSPOT's location
+* [`netsettings.cgi`](#netsettingscgi) - Manage network settings
+* [`passwordsettings.cgi`](#passwordsettingscgi) - Change openSPOT's password
+* [`spksettings.cgi`](#spksettingscgi) - Manage voice announcement settings
 
-Doesn't take any parameters from a query. Returns the session token, which is
-a hexadecimal uint32_t (8 ASCII characters).
+### Connector Management
+* [`connector.cgi`](#connectorcgi) - Manage openSPOT's active connector
+* [`connectorsettings.cgi`](#connectorsettingscgi) - Other settings for the connector
 
-Response:
-```json
-{
-  "token": "1f9a8b7c"
-}
-```
+### Connector Settings
+* [`c4fmautocal.cgi`](#c4fmautocalcgi) - C4FM Auto-calibrations status
+* [`dcsxlxsettings.cgi`](#dcsxlxsettingscgi) - DCS/XLS connector settings
+* [`dmrautocal.cgi`](#dmrautocalcgi) - DMR auto-calibration status
+* [`dmrplussettings.cgi`](#dmrplussettingscgi) - DMRPlus connector settings
+* [`fcssettings.cgi`](#fcssettingscgi) - FCS connector settings
+* [`homebrewsettings.cgi`](#homebrewsettingscgi) - Homebrew connector settings
+* [`nullsettings.cgi`](#nullsettingscgi) - Null connector settings
+* [`refxrfsettings.cgi`](#refxrfsettingscgi) - REF/XRF connector settings
+* [`srfipconnclientsettings.cgi`](#srfipconnclientsettingscgi) - SharkRF IP Connector Client Setttings
+* [`srfipconnserversettings.cgi`](#srfipconnserversettingscgi) - SharkRF IP Connector Server Settings
+* [`status-srfipconnserver.cgi`](#status-srfipconnservercgi) - SharkRF IP Connector current status
+* [`ysfrefsettings.cgi`](#ysfrefsettingscgi) - YSFReflector connector settings
+
+### Modem Management
+* [`modemcal.cgi`](#modemcalcgi) - Modem calibration settings
+* [`modemcwid.cgi`](#modemcwidcgi) - Modem CW ID settings
+* [`modemfreq.cgi`](#modemfreqcgi) - Modem TX/RX frequency &amp; power settings
+* [`modemmode.cgi`](#modemmodecgi) - Current active modem settings
+* [`modemmodulation.cgi`](#modemmodulationcgi) - Active modem modulation mode
+* [`modemother.cgi`](#modemothercgi) - Other modem setings (call hang time, etc)
+* [`modempacket.cgi`](#modempacketcgi) - Modem packet settings
+* [`modemtdma.cgi`](#modemtdmacgi) - Modem TDMA settings
+
+### Mode/Network-specific Settings
+* [`bmmsettings.cgi`](#bmmsettingscgi) - BrandMeister API settings
+* [`c4fmsettings.cgi`](#c4fmsettingscgi) - C4FM network settings
+* [`dmrsettings.cgi`](#dmrsettingscgi) - DMR settings
+* [`dstarsettings.cgi`](#dstarsettingscgi) - D-STAR settings
+* [`locksettings.cgi`](#locksettingscgi) - Callsign/CCS7 ID lock settings
+* [`quickcall.cgi`](#quickcallcgi) - Request a DMR quick-call
+* [`status-dmrsms.cgi`](#status-dmrsmscgi) - DMR SMS send status
+
+----
+
+## User/Session Management
 
 ### checkauth.cgi
 
@@ -92,6 +133,18 @@ Response:
   "nopass": 0,
   "hostname": "openspot",
   "ip_address": "192.168.3.99"
+}
+```
+
+### gettok.cgi
+
+Doesn't take any parameters from a query. Returns the session token, which is
+a hexadecimal uint32_t (8 ASCII characters).
+
+Response:
+```json
+{
+  "token": "1f9a8b7c"
 }
 ```
 
@@ -115,6 +168,41 @@ Logs out the user.
 Response:
 ```json
 {}
+```
+
+## Device Management
+
+### info.cgi
+
+Allows you to query (GET) general info about the device.
+*blver* is the bootloader version. *uid* is the device unique ID
+in hexadecimal.
+*uptime* is in seconds. *locked_to_country* is set to the country's
+ISO code if there's a lock active on the current device.
+
+Response:
+```json
+{
+  "hwver": "1.0",
+  "locked_to_country": "",
+  "swver": "0001",
+  "subver": "433",
+  "blver": "0001",
+  "uptime": 123,
+  "mac": "FE:28:00:00:00:FA",
+  "uid": "abcdef"
+}
+```
+
+### ip.cgi
+
+Returns the IP address of openSPOT.
+
+Response:
+```json
+{
+  "ip": "192.168.3.106"
+}
 ```
 
 ### reboot.cgi
@@ -219,73 +307,230 @@ Response:
 }
 ```
 
-### status-dmrsms.cgi
+## Config Profile Management
 
-Returns current status of DMR SMS sending, if the modem is in DMR mode.
-Otherwise it returns 400 Bad Request. It also handles SMS sending.
+### config-export.cgi
 
-Call types: 0 - private, 1 - group.
-Format IDs: 0 - ETSI, 1 - UDP, 2 - UDP/Chinese. See user manual for more info.
-If a new message is received, *rx_msg_valid* is 1.
-Setting a new *send_srcid* in the query overwrites the *default_srcid*.
-If *send_to_modem* is 0, the SMS will be sent to the currently active connector.
-If *intercept_net_msgs* is 1, then SMS messages coming from the network to
-the *default_srcid* will be processed.
-If *only_save* is 1, the SMS will not get sent, only the *send_srcid* and
-*intercept_net* settings will be stored.
-
-Messages are in hexadecimal UTF16BE format. Example: "BEER" = "0042004500450052"
-Max. message length which can be sent is currently 75 UTF16BE characters (150
-hex char pairs).
+If you want to export the active config profile settings, you can POST
+a query to this CGI. You can request settings in chunks. The number of
+available chunks is in *chunk_count* (this can also be requested with a
+GET query). Each chunk is represented in string of hexadecimal character
+pairs. *config_size* is the count of valid config bytes in the file.
+The whole config's CRC is returned in *config_crc*. Note that *chunk*
+data in this example is truncated.
 
 Query (optional):
 ```json
 {
-  "only_save": 0,
-  "intercept_net_msgs": 0,
-  "send_dstid": 2161005,
-  "send_calltype": 0,
-  "send_srcid": 9998,
-  "send_format": 0,
-  "send_tdma_channel": 0,
-  "send_to_modem": 0,
-  "send_msg": "0042004500450052"
+  "chunk_nr": 0
 }
 ```
-
 Response:
 ```json
 {
-  "default_srcid": 9998,
-  "intercept_net_msgs": 0,
-  "send_ongoing": 0,
-  "send_success": 1,
-  "send_fail": 0,
-  "rx_msg_valid": 0,
-  "rx_msg_srcid": 1234,
-  "rx_msg_dstid": 9998,
-  "rx_msg_calltype": 0,
-  "rx_msg_format": 0,
-  "rx_msg_from_modem": 0,
-  "rx_msg": "0042004500450052"
+  "config_size": 1458,
+  "config_crc": "a9fd8832",
+  "chunk_count": 3,
+  "chunk_nr": 0,
+  "chunk": "982443abcdef"
 }
 ```
 
-### status-srfipconnserver.cgi
+### config-import.cgi
 
-Returns the SharkRF IP Connector Server's current status, if it's the
-active connector. Otherwise it'll return 400 Bad Request.
+If you want to import the active config profile settings, you can POST
+a query to this CGI.
 
-*client_connected* is 1 if a client is connected.
+*config_size* is the count of valid config bytes in the file.
+*chunk_size* is the length which this CGI waits *chunk* data in string
+of hexadecimal character pairs.
+*chunk_count* is the total number of *chunks* needed for a successful import.
+*active_cp_hostname* is the hostname of openSPOT. This is always returned
+because it may be changed after a successful import - in this case the caller
+knows on what address openSPOT will start listening on after the device
+reboots. Note that *chunk* data in this example is truncated.
 
+*status* can be the following:
+
+- 0: CONFIGAREA_IMPORT_STATUS_INITIALIZED
+- 1: CONFIGAREA_IMPORT_STATUS_NEED_MORE_CHUNKS
+- 2: CONFIGAREA_IMPORT_STATUS_SUCCESS
+- 3: CONFIGAREA_IMPORT_STATUS_STRUCT_VERSION_MISMATCH
+- 4: CONFIGAREA_IMPORT_STATUS_CRC_ERR
+- 5: CONFIGAREA_IMPORT_STATUS_INVALID_FILE
+- 6: CONFIGAREA_IMPORT_STATUS_FAIL
+
+*status* will always be 0 when calling this CGI without query parameters.
+
+Query (optional):
+```json
+{
+  "config_size": 1458,
+  "config_crc": "a9fd8832",
+  "chunk_nr": 0,
+  "chunk": "982443abcdef"
+}
+```
 Response:
 ```json
 {
-  "client_connected": 0,
-  "client_id": 1234,
-  "client_callsign": ""
+  "chunk_size": 1024,
+  "chunk_count": 3,
+  "active_cp_hostname": "openspot",
+  "status": 0
 }
 ```
+
+### cpsettings.cgi
+
+Config profile settings query (GET)/change (POST). Returns currently
+active settings.
+*reboot* is 1 if the active config profile has been changed and openSPOT
+is rebooting. *active_cp_initialized* is 1 if the currently active config
+profile is initialized. The array *cp_names* contain each config profile's
+name. *timeoutchange_cp* is the profile number which should be activated
+after *rxtimeout_sec* seconds.
+
+Query (optional):
+```json
+{
+  "active_cp": 0,
+  "timeoutchange_cp": 0,
+  "rxtimeout_sec": 0,
+  "active_cp_name": "default",
+  "active_cp_copyto": 0
+}
+```
+Response:
+```json
+{
+  "reboot": 0,
+  "active_cp": 0,
+  "timeoutchange_cp": 0,
+  "rxtimeout_sec": 0,
+  "active_cp_hostname": "openspot",
+  "active_cp_initialized": 1,
+  "cp_names": ["default", "", "", "", ""]
+}
+```
+
+## Other Settings
+
+### locationsettings.cgi
+
+Location settings query (GET)/change (POST). Returns currently
+active settings. Country is the country code (2 chars) or the string "global".
+
+Query (optional):
+```json
+{
+  "country": "global",
+  "latitude": "0.0",
+  "longitude": "0.0",
+  "height_agl": 0,
+  "name": ""
+}
+```
+Response:
+```json
+{
+  "latitude": "0.0",
+  "longitude": "0.0",
+  "height_agl": 0,
+  "name": ""
+}
+```
+
+### netsettings.cgi
+
+Network settings query (GET)/change (POST). Returns currently active settings.
+
+*ip_config_mode* can be:
+  - 0: DHCP
+  - 1: DHCP with auto IP
+  - 2: Auto IP
+  - 3: Static IP
+
+Query (optional):
+```json
+{
+  "ip_config_mode": 0,
+  "hostname": "openspot",
+  "static_ip": "192.168.1.99",
+  "static_mask": "255.255.255.0",
+  "static_gw": "192.168.1.1",
+  "static_dns1": "8.8.8.8",
+  "static_dns2": "8.8.4.4",
+  "usestaticdns": 1,
+  "dejitter_queue_msec": 130
+}
+```
+Response:
+```json
+{
+  "ip_config_mode": 0,
+  "hostname": "openspot",
+  "static_ip": "192.168.1.99",
+  "static_mask": "255.255.255.0",
+  "static_gw": "192.168.1.1",
+  "static_dns1": "8.8.8.8",
+  "static_dns2": "8.8.4.4",
+  "usestaticdns": 1,
+  "dejitter_queue_msec": 130
+}
+```
+
+### passwordsettings.cgi
+
+Allows you to change openSPOT's password.
+
+Query:
+```json
+{
+  "password": "openspot"
+}
+```
+Response:
+```json
+{}
+```
+
+
+### spksettings.cgi
+
+Voice announcement settings query (GET)/change (POST). Returns currently
+active settings.
+
+Query (optional):
+```json
+{
+  "enabled": 1,
+  "shortbm": 0,
+  "remote_only": 0,
+  "host": "spk.sharkrf.com",
+  "port": 65200,
+  "src_dmr_id": 9998,
+  "prof_dmr_id": 9000,
+  "con_dmr_id": 9998,
+  "ip_dmr_id": 9001
+}
+```
+Response:
+```json
+{
+  "enabled": 1,
+  "shortbm": 0,
+  "remote_only": 0,
+  "host": "spk.sharkrf.com",
+  "port": 65200,
+  "src_dmr_id": 9998,
+  "prof_dmr_id": 9000,
+  "con_dmr_id": 9998,
+  "ip_dmr_id": 9001
+}
+```
+
+## Connector Management
 
 ### connector.cgi
 
@@ -336,23 +581,111 @@ Response:
 }
 ```
 
-### nullsettings.cgi
+## Connector Settings
 
-Null connector settings query (GET)/change (POST). Returns currently
-active settings.
+### c4fmautocal.cgi
+
+You can periodically query (GET) this CGI to get current C4FM
+demodulation mode auto calibration status. Also you can change
+this connector's modem RX/TX frequencies. When the frequencies
+are changed, the connector is restarted.
+
+State can be:
+
+- 0: idle
+- 1: calibrating
+- 2: finished, result available
+- 3: modem is not in C4FM half deviation mode
+
+Progress is in percent. Result is the auto calibrated demodulation
+mode (0 - A, 1 - B, 2 - C, etc.)
 
 Query (optional):
 ```json
 {
   "rx_freq": 436000000,
-  "tx_freq": 436000000
+  "tx_freq": 436000000,
 }
 ```
 Response:
 ```json
 {
   "rx_freq": 436000000,
-  "tx_freq": 436000000
+  "tx_freq": 436000000,
+  "state": 1,
+  "progress": 56,
+  "result": 2
+}
+```
+
+### dcsxlxsettings.cgi
+
+DCS/XLX connector settings query (GET)/change (POST). Returns currently
+active settings.
+
+Query (optional):
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "",
+  "port": 12345,
+  "ccs_port": 12345,
+  "callsign": "",
+  "local_module": "A",
+  "reflector": "DCS025",
+  "remote_module": "Z",
+  "rx_timeout_sec": 30
+}
+```
+Response:
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "",
+  "port": 12345,
+  "ccs_port": 12345,
+  "callsign": "",
+  "local_module": "A",
+  "reflector": "DCS025",
+  "remote_module": "Z",
+  "rx_timeout_sec": 1
+}
+```
+
+### dmrautocal.cgi
+
+You can periodically query (GET) this CGI to get current DMR
+demodulation mode auto calibration status. Also you can change
+this connector's modem RX/TX frequencies. When the frequencies
+are changed, the connector is restarted.
+
+State can be:
+
+- 0: idle
+- 1: calibrating
+- 2: finished, result available
+- 3: modem is not in DMR mode
+
+Progress is in percent. Result is the auto calibrated demodulation
+mode (0 - A, 1 - B, 2 - C, etc.)
+
+Query (optional):
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+}
+```
+Response:
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "state": 1,
+  "progress": 56,
+  "result": 2
 }
 ```
 
@@ -383,6 +716,42 @@ Response:
   "port": 8880,
   "dmr_id": "",
   "reflector_id": 0,
+  "keepalive_interval_sec": 1,
+  "rx_timeout_sec": 10
+}
+```
+
+### fcssettings.cgi
+
+FCS connector settings query (GET)/change (POST). Returns currently
+active settings.
+
+Query (optional):
+```json
+{
+  "server_host": "fcs001.xreflector.net",
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "port": 12345,
+  "callsign": "",
+  "ccs7_id": 2161005,
+  "reflector": "FCS001",
+  "room_number": 25,
+  "keepalive_interval_sec": 1,
+  "rx_timeout_sec": 30
+}
+```
+Response:
+```json
+{
+  "rx_freq": 436000000,
+  "tx_freq": 436000000,
+  "server_host": "fcs001.xreflector.net",
+  "port": 12345,
+  "callsign": "",
+  "ccs7_id": 2161005,
+  "reflector": "FCS001",
+  "room_number": 25,
   "keepalive_interval_sec": 1,
   "rx_timeout_sec": 10
 }
@@ -459,41 +828,26 @@ Response:
 }
 ```
 
-### dcsxlxsettings.cgi
+### nullsettings.cgi
 
-DCS/XLX connector settings query (GET)/change (POST). Returns currently
+Null connector settings query (GET)/change (POST). Returns currently
 active settings.
 
 Query (optional):
 ```json
 {
   "rx_freq": 436000000,
-  "tx_freq": 436000000,
-  "server_host": "",
-  "port": 12345,
-  "ccs_port": 12345,
-  "callsign": "",
-  "local_module": "A",
-  "reflector": "DCS025",
-  "remote_module": "Z",
-  "rx_timeout_sec": 30
+  "tx_freq": 436000000
 }
 ```
 Response:
 ```json
 {
   "rx_freq": 436000000,
-  "tx_freq": 436000000,
-  "server_host": "",
-  "port": 12345,
-  "ccs_port": 12345,
-  "callsign": "",
-  "local_module": "A",
-  "reflector": "DCS025",
-  "remote_module": "Z",
-  "rx_timeout_sec": 1
+  "tx_freq": 436000000
 }
 ```
+
 
 ### refxrfsettings.cgi
 
@@ -532,72 +886,6 @@ Response:
   "remote_module": "C",
   "allow_g": 1,
   "rx_timeout_sec": 1
-}
-```
-
-### fcssettings.cgi
-
-FCS connector settings query (GET)/change (POST). Returns currently
-active settings.
-
-Query (optional):
-```json
-{
-  "server_host": "fcs001.xreflector.net",
-  "rx_freq": 436000000,
-  "tx_freq": 436000000,
-  "port": 12345,
-  "callsign": "",
-  "ccs7_id": 2161005,
-  "reflector": "FCS001",
-  "room_number": 25,
-  "keepalive_interval_sec": 1,
-  "rx_timeout_sec": 30
-}
-```
-Response:
-```json
-{
-  "rx_freq": 436000000,
-  "tx_freq": 436000000,
-  "server_host": "fcs001.xreflector.net",
-  "port": 12345,
-  "callsign": "",
-  "ccs7_id": 2161005,
-  "reflector": "FCS001",
-  "room_number": 25,
-  "keepalive_interval_sec": 1,
-  "rx_timeout_sec": 10
-}
-```
-
-### ysfrefsettings.cgi
-
-YSFReflector connector settings query (GET)/change (POST). Returns currently
-active settings.
-
-Query (optional):
-```json
-{
-  "server_host": "",
-  "rx_freq": 436000000,
-  "tx_freq": 436000000,
-  "port": 42000,
-  "callsign": "",
-  "keepalive_interval_sec": 1,
-  "rx_timeout_sec": 30
-}
-```
-Response:
-```json
-{
-  "rx_freq": 436000000,
-  "tx_freq": 436000000,
-  "server_host": "",
-  "port": 42000,
-  "callsign": "",
-  "keepalive_interval_sec": 1,
-  "rx_timeout_sec": 10
 }
 ```
 
@@ -661,63 +949,37 @@ Response:
 }
 ```
 
-### dmrautocal.cgi
+### status-srfipconnserver.cgi
 
-You can periodically query (GET) this CGI to get current DMR
-demodulation mode auto calibration status. Also you can change
-this connector's modem RX/TX frequencies. When the frequencies
-are changed, the connector is restarted.
+Returns the SharkRF IP Connector Server's current status, if it's the
+active connector. Otherwise it'll return 400 Bad Request.
 
-State can be:
+*client_connected* is 1 if a client is connected.
 
-- 0: idle
-- 1: calibrating
-- 2: finished, result available
-- 3: modem is not in DMR mode
-
-Progress is in percent. Result is the auto calibrated demodulation
-mode (0 - A, 1 - B, 2 - C, etc.)
-
-Query (optional):
-```json
-{
-  "rx_freq": 436000000,
-  "tx_freq": 436000000,
-}
-```
 Response:
 ```json
 {
-  "rx_freq": 436000000,
-  "tx_freq": 436000000,
-  "state": 1,
-  "progress": 56,
-  "result": 2
+  "client_connected": 0,
+  "client_id": 1234,
+  "client_callsign": ""
 }
 ```
 
-### c4fmautocal.cgi
+### ysfrefsettings.cgi
 
-You can periodically query (GET) this CGI to get current C4FM
-demodulation mode auto calibration status. Also you can change
-this connector's modem RX/TX frequencies. When the frequencies
-are changed, the connector is restarted.
-
-State can be:
-
-- 0: idle
-- 1: calibrating
-- 2: finished, result available
-- 3: modem is not in C4FM half deviation mode
-
-Progress is in percent. Result is the auto calibrated demodulation
-mode (0 - A, 1 - B, 2 - C, etc.)
+YSFReflector connector settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
 {
+  "server_host": "",
   "rx_freq": 436000000,
   "tx_freq": 436000000,
+  "port": 42000,
+  "callsign": "",
+  "keepalive_interval_sec": 1,
+  "rx_timeout_sec": 30
 }
 ```
 Response:
@@ -725,375 +987,67 @@ Response:
 {
   "rx_freq": 436000000,
   "tx_freq": 436000000,
-  "state": 1,
-  "progress": 56,
-  "result": 2
+  "server_host": "",
+  "port": 42000,
+  "callsign": "",
+  "keepalive_interval_sec": 1,
+  "rx_timeout_sec": 10
 }
 ```
 
-### info.cgi
+## Modem Management
 
-Allows you to query (GET) general info about the device.
-*blver* is the bootloader version. *uid* is the device unique ID
-in hexadecimal.
-*uptime* is in seconds. *locked_to_country* is set to the country's
-ISO code if there's a lock active on the current device.
+### modemcal.cgi
 
-Response:
-```json
-{
-  "hwver": "1.0",
-  "locked_to_country": "",
-  "swver": "0001",
-  "subver": "433",
-  "blver": "0001",
-  "uptime": 123,
-  "mac": "FE:28:00:00:00:FA",
-  "uid": "abcdef"
-}
-```
-
-### cpsettings.cgi
-
-Config profile settings query (GET)/change (POST). Returns currently
-active settings.
-*reboot* is 1 if the active config profile has been changed and openSPOT
-is rebooting. *active_cp_initialized* is 1 if the currently active config
-profile is initialized. The array *cp_names* contain each config profile's
-name. *timeoutchange_cp* is the profile number which should be activated
-after *rxtimeout_sec* seconds.
+Modem calibration settings query (GET)/change (POST). Returns currently
+active settings. *modem_init_delay_ms* is the time needed for the modem
+to calibrate and initialize.
 
 Query (optional):
 ```json
 {
-  "active_cp": 0,
-  "timeoutchange_cp": 0,
-  "rxtimeout_sec": 0,
-  "active_cp_name": "default",
-  "active_cp_copyto": 0
+  "auto_calibration": 1,
+  "recalibrate_temp_diff_in_celsius": 10,
+  "recalibrate_rf_ic_temp_diff_in_celsius": 10,
+  "temp_read_interval_in_sec": 10,
+  "temp_read_delay_in_sec_after_sync_lost": 10,
+  "quick_calibrate_delay_in_sec_after_sync_lost": 10
 }
 ```
 Response:
 ```json
 {
-  "reboot": 0,
-  "active_cp": 0,
-  "timeoutchange_cp": 0,
-  "rxtimeout_sec": 0,
-  "active_cp_hostname": "openspot",
-  "active_cp_initialized": 1,
-  "cp_names": ["default", "", "", "", ""]
+  "modem_init_delay_ms": 3500,
+  "auto_calibration": 1,
+  "recalibrate_temp_diff_in_celsius": 10,
+  "recalibrate_rf_ic_temp_diff_in_celsius": 10,
+  "temp_read_interval_in_sec": 10,
+  "temp_read_delay_in_sec_after_sync_lost": 10,
+  "quick_calibrate_delay_in_sec_after_sync_lost": 10
 }
 ```
 
-### config-export.cgi
+### modemcwid.cgi
 
-If you want to export the active config profile settings, you can POST
-a query to this CGI. You can request settings in chunks. The number of
-available chunks is in *chunk_count* (this can also be requested with a
-GET query). Each chunk is represented in string of hexadecimal character
-pairs. *config_size* is the count of valid config bytes in the file.
-The whole config's CRC is returned in *config_crc*. Note that *chunk*
-data in this example is truncated.
-
-Query (optional):
-```json
-{
-  "chunk_nr": 0
-}
-```
-Response:
-```json
-{
-  "config_size": 1458,
-  "config_crc": "a9fd8832",
-  "chunk_count": 3,
-  "chunk_nr": 0,
-  "chunk": "982443abcdef"
-}
-```
-
-### config-import.cgi
-
-If you want to import the active config profile settings, you can POST
-a query to this CGI.
-
-*config_size* is the count of valid config bytes in the file.
-*chunk_size* is the length which this CGI waits *chunk* data in string
-of hexadecimal character pairs.
-*chunk_count* is the total number of *chunks* needed for a successful import.
-*active_cp_hostname* is the hostname of openSPOT. This is always returned
-because it may be changed after a successful import - in this case the caller
-knows on what address openSPOT will start listening on after the device
-reboots. Note that *chunk* data in this example is truncated.
-
-*status* can be the following:
-
-- 0: CONFIGAREA_IMPORT_STATUS_INITIALIZED
-- 1: CONFIGAREA_IMPORT_STATUS_NEED_MORE_CHUNKS
-- 2: CONFIGAREA_IMPORT_STATUS_SUCCESS
-- 3: CONFIGAREA_IMPORT_STATUS_STRUCT_VERSION_MISMATCH
-- 4: CONFIGAREA_IMPORT_STATUS_CRC_ERR
-- 5: CONFIGAREA_IMPORT_STATUS_INVALID_FILE
-- 6: CONFIGAREA_IMPORT_STATUS_FAIL
-
-*status* will always be 0 when calling this CGI without query parameters.
-
-Query (optional):
-```json
-{
-  "config_size": 1458,
-  "config_crc": "a9fd8832",
-  "chunk_nr": 0,
-  "chunk": "982443abcdef"
-}
-```
-Response:
-```json
-{
-  "chunk_size": 1024,
-  "chunk_count": 3,
-  "active_cp_hostname": "openspot",
-  "status": 0
-}
-```
-
-### passwordsettings.cgi
-
-Allows you to change openSPOT's password.
-
-Query:
-```json
-{
-  "password": "openspot",
-}
-```
-Response:
-```json
-{}
-```
-
-### netsettings.cgi
-
-Network settings query (GET)/change (POST). Returns currently active settings.
-
-*ip_config_mode* can be:
-  - 0: DHCP
-  - 1: DHCP with auto IP
-  - 2: Auto IP
-  - 3: Static IP
-
-Query (optional):
-```json
-{
-  "ip_config_mode": 0,
-  "hostname": "openspot",
-  "static_ip": "192.168.1.99",
-  "static_mask": "255.255.255.0",
-  "static_gw": "192.168.1.1",
-  "static_dns1": "8.8.8.8",
-  "static_dns2": "8.8.4.4",
-  "usestaticdns": 1,
-  "dejitter_queue_msec": 130
-}
-```
-Response:
-```json
-{
-  "ip_config_mode": 0,
-  "hostname": "openspot",
-  "static_ip": "192.168.1.99",
-  "static_mask": "255.255.255.0",
-  "static_gw": "192.168.1.1",
-  "static_dns1": "8.8.8.8",
-  "static_dns2": "8.8.4.4",
-  "usestaticdns": 1,
-  "dejitter_queue_msec": 130
-}
-```
-
-### spksettings.cgi
-
-Voice announcement settings query (GET)/change (POST). Returns currently
+Modem CW ID settings query (GET)/change (POST). Returns currently
 active settings.
 
 Query (optional):
 ```json
 {
-  "enabled": 1,
-  "shortbm": 0,
-  "remote_only": 0,
-  "host": "spk.sharkrf.com",
-  "port": 65200,
-  "src_dmr_id": 9998,
-  "prof_dmr_id": 9000,
-  "con_dmr_id": 9998,
-  "ip_dmr_id": 9001
+  "cwid": "HA2NON",
+  "wpm": 25,
+  "interval_sec": 600,
+  "delay_sec": 30
 }
 ```
 Response:
 ```json
 {
-  "enabled": 1,
-  "shortbm": 0,
-  "remote_only": 0,
-  "host": "spk.sharkrf.com",
-  "port": 65200,
-  "src_dmr_id": 9998,
-  "prof_dmr_id": 9000,
-  "con_dmr_id": 9998,
-  "ip_dmr_id": 9001
-}
-```
-
-### locationsettings.cgi
-
-Location settings query (GET)/change (POST). Returns currently
-active settings. Country is the country code (2 chars) or the string "global".
-
-Query (optional):
-```json
-{
-  "country": "global",
-  "latitude": "0.0",
-  "longitude": "0.0",
-  "height_agl": 0,
-  "name": ""
-}
-```
-Response:
-```json
-{
-  "latitude": "0.0",
-  "longitude": "0.0",
-  "height_agl": 0,
-  "name": ""
-}
-```
-
-### dmrsettings.cgi
-
-General DMR settings query (GET)/change (POST). Returns currently
-active settings.
-
-If *no_inband* is set to 1, in-band DMR data like GPS pos. or talker alias
-will not be sent to the modem.
-
-Query (optional):
-```json
-{
-  "force_talker_alias": "abcd",
-  "no_inband": 0,
-  "cc": 1,
-  "echo_id": 9999,
-  "default_c4fm_id": 0,
-  "transmit_idle_in_idle_tx_tdma_channel": 1
-}
-```
-Response:
-```json
-{
-  "force_talker_alias": "abcd",
-  "no_inband": 0,
-  "cc": 1,
-  "echo_id": 9999,
-  "default_c4fm_id": 0,
-  "transmit_idle_in_idle_tx_tdma_channel": 1
-}
-```
-
-### dstarsettings.cgi
-
-General D-STAR settings query (GET)/change (POST). Returns currently
-active settings.
-
-Query (optional):
-```json
-{
-  "echo_callsign": "       E",
-  "transmit_rx_confirmation": 1
-}
-```
-Response:
-```json
-{
-  "echo_callsign": "       E",
-  "transmit_rx_confirmation": 1
-}
-```
-
-### c4fmsettings.cgi
-
-General C4FM settings query (GET)/change (POST). Returns currently
-active settings. *dmr_def_cs* is the default C4FM callsign for DMR calls.
-
-If *only_rx_with_sql_code_en* is 1, then the modem only processes C4FM
-calls with SQL code *only_rx_with_sql_code*.
-
-If *force_sql_code_to_modem_en* is 1, all C4FM frames sent to the
-modem will have SQL code *force_sql_code_to_modem* set.
-
-If *force_sql_code_to_net_en* is 1, all C4FM frames sent to the
-network will have SQL code *force_sql_code_to_net* set.
-
-Query (optional):
-```json
-{
-  "dtmf_automute_cmds": 1,
-  "dtmf_pcode": "*",
-  "dtmf_gcode": "#",
-  "transmit_rx_confirmation": 1,
-  "dmr_def_cs": "",
-  "only_rx_with_sql_code_en": 0,
-  "only_rx_with_sql_code": 123,
-  "force_sql_code_to_modem_en": 0,
-  "force_sql_code_to_modem": 123,
-  "force_sql_code_to_net_en": 0,
-  "force_sql_code_to_net": 123
-}
-```
-Response:
-```json
-{
-  "dtmf_automute_cmds": 1,
-  "dtmf_pcode": "*",
-  "dtmf_gcode": "#",
-  "transmit_rx_confirmation": 1,
-  "dmr_def_cs": "",
-  "only_rx_with_sql_code_en": 0,
-  "only_rx_with_sql_code": 123,
-  "force_sql_code_to_modem_en": 0,
-  "force_sql_code_to_modem": 123,
-  "force_sql_code_to_net_en": 0,
-  "force_sql_code_to_net": 123
-}
-```
-
-### locksettings.cgi
-
-Callsign/CCS7 ID lock settings query (GET)/change (POST). Returns currently
-active settings.
-
-Query (optional):
-```json
-{
-  "id1": 2161005,
-  "callsign1": "HA2NON",
-  "id2": 2161006,
-  "callsign2": "HG1MA",
-  "id3": 0,
-  "callsign3": ""
-}
-```
-Response:
-```json
-{
-  "id1": 2161005,
-  "callsign1": "HA2NON",
-  "id2": 2161006,
-  "callsign2": "HG1MA",
-  "id3": 0,
-  "callsign3": ""
+  "cwid": "HA2NON",
+  "wpm": 25,
+  "interval_sec": 600,
+  "delay_sec": 30
 }
 ```
 
@@ -1126,29 +1080,6 @@ Response:
 }
 ```
 
-### modemcwid.cgi
-
-Modem CW ID settings query (GET)/change (POST). Returns currently
-active settings.
-
-Query (optional):
-```json
-{
-  "cwid": "HA2NON",
-  "wpm": 25,
-  "interval_sec": 600,
-  "delay_sec": 30
-}
-```
-Response:
-```json
-{
-  "cwid": "HA2NON",
-  "wpm": 25,
-  "interval_sec": 600,
-  "delay_sec": 30
-}
-```
 
 ### modemmode.cgi
 
@@ -1216,6 +1147,42 @@ Response:
 }
 ```
 
+### modemother.cgi
+
+Other modem settings query (GET)/change (POST). Returns currently
+active settings. *modem_init_delay_ms* is the time needed for the
+modem to calibrate and initialize.
+
+*agc_auto* and *external_vco* fields are booleans.
+
+Query (optional):
+```json
+{
+  "rssi_avg_sample_count": 5,
+  "bclo_dbm": -80,
+  "high_gain_low_linearity": 0,
+  "agc_auto": 0,
+  "agc_low_threshold_dbm": -50,
+  "agc_high_threshold_dbm": -80,
+  "external_vco": 0,
+  "call_hang_time_ms": 3000
+}
+```
+Response:
+```json
+{
+  "modem_init_delay_ms": 3500,
+  "rssi_avg_sample_count": 5,
+  "bclo_dbm": -80,
+  "high_gain_low_linearity": 0,
+  "agc_auto": 0,
+  "agc_low_threshold_dbm": -50,
+  "agc_high_threshold_dbm": -80,
+  "external_vco": 0,
+  "call_hang_time_ms": 3000
+}
+```
+
 ### modempacket.cgi
 
 Modem packet settings query (GET)/change (POST). Returns currently
@@ -1272,69 +1239,150 @@ Response:
 }
 ```
 
-### modemcal.cgi
+## Mode/Network-specific Settings
 
-Modem calibration settings query (GET)/change (POST). Returns currently
-active settings. *modem_init_delay_ms* is the time needed for the modem
-to calibrate and initialize.
+### bmmsettings.cgi
+
+BrandMeister API settings query (GET)/change (POST). Returns currently
+active settings.
 
 Query (optional):
 ```json
 {
-  "auto_calibration": 1,
-  "recalibrate_temp_diff_in_celsius": 10,
-  "recalibrate_rf_ic_temp_diff_in_celsius": 10,
-  "temp_read_interval_in_sec": 10,
-  "temp_read_delay_in_sec_after_sync_lost": 10,
-  "quick_calibrate_delay_in_sec_after_sync_lost": 10
+  "apikey": "abcdef"
 }
 ```
 Response:
 ```json
 {
-  "modem_init_delay_ms": 3500,
-  "auto_calibration": 1,
-  "recalibrate_temp_diff_in_celsius": 10,
-  "recalibrate_rf_ic_temp_diff_in_celsius": 10,
-  "temp_read_interval_in_sec": 10,
-  "temp_read_delay_in_sec_after_sync_lost": 10,
-  "quick_calibrate_delay_in_sec_after_sync_lost": 10
+  "apikey": "abcdef"
 }
 ```
 
-### modemother.cgi
+### c4fmsettings.cgi
 
-Other modem settings query (GET)/change (POST). Returns currently
-active settings. *modem_init_delay_ms* is the time needed for the
-modem to calibrate and initialize.
+General C4FM settings query (GET)/change (POST). Returns currently
+active settings. *dmr_def_cs* is the default C4FM callsign for DMR calls.
 
-*agc_auto* and *external_vco* fields are booleans.
+If *only_rx_with_sql_code_en* is 1, then the modem only processes C4FM
+calls with SQL code *only_rx_with_sql_code*.
+
+If *force_sql_code_to_modem_en* is 1, all C4FM frames sent to the
+modem will have SQL code *force_sql_code_to_modem* set.
+
+If *force_sql_code_to_net_en* is 1, all C4FM frames sent to the
+network will have SQL code *force_sql_code_to_net* set.
 
 Query (optional):
 ```json
 {
-  "rssi_avg_sample_count": 5,
-  "bclo_dbm": -80,
-  "high_gain_low_linearity": 0,
-  "agc_auto": 0,
-  "agc_low_threshold_dbm": -50,
-  "agc_high_threshold_dbm": -80,
-  "external_vco": 0,
-  "call_hang_time_ms": 3000
+  "dtmf_automute_cmds": 1,
+  "dtmf_pcode": "*",
+  "dtmf_gcode": "#",
+  "transmit_rx_confirmation": 1,
+  "dmr_def_cs": "",
+  "only_rx_with_sql_code_en": 0,
+  "only_rx_with_sql_code": 123,
+  "force_sql_code_to_modem_en": 0,
+  "force_sql_code_to_modem": 123,
+  "force_sql_code_to_net_en": 0,
+  "force_sql_code_to_net": 123
 }
 ```
 Response:
 ```json
 {
-  "modem_init_delay_ms": 3500,
-  "rssi_avg_sample_count": 5,
-  "bclo_dbm": -80,
-  "high_gain_low_linearity": 0,
-  "agc_auto": 0,
-  "agc_low_threshold_dbm": -50,
-  "agc_high_threshold_dbm": -80,
-  "external_vco": 0,
-  "call_hang_time_ms": 3000
+  "dtmf_automute_cmds": 1,
+  "dtmf_pcode": "*",
+  "dtmf_gcode": "#",
+  "transmit_rx_confirmation": 1,
+  "dmr_def_cs": "",
+  "only_rx_with_sql_code_en": 0,
+  "only_rx_with_sql_code": 123,
+  "force_sql_code_to_modem_en": 0,
+  "force_sql_code_to_modem": 123,
+  "force_sql_code_to_net_en": 0,
+  "force_sql_code_to_net": 123
+}
+```
+
+### dmrsettings.cgi
+
+General DMR settings query (GET)/change (POST). Returns currently
+active settings.
+
+If *no_inband* is set to 1, in-band DMR data like GPS pos. or talker alias
+will not be sent to the modem.
+
+Query (optional):
+```json
+{
+  "force_talker_alias": "abcd",
+  "no_inband": 0,
+  "cc": 1,
+  "echo_id": 9999,
+  "default_c4fm_id": 0,
+  "transmit_idle_in_idle_tx_tdma_channel": 1
+}
+```
+Response:
+```json
+{
+  "force_talker_alias": "abcd",
+  "no_inband": 0,
+  "cc": 1,
+  "echo_id": 9999,
+  "default_c4fm_id": 0,
+  "transmit_idle_in_idle_tx_tdma_channel": 1
+}
+```
+
+### dstarsettings.cgi
+
+General D-STAR settings query (GET)/change (POST). Returns currently
+active settings.
+
+Query (optional):
+```json
+{
+  "echo_callsign": "       E",
+  "transmit_rx_confirmation": 1
+}
+```
+Response:
+```json
+{
+  "echo_callsign": "       E",
+  "transmit_rx_confirmation": 1
+}
+```
+
+
+### locksettings.cgi
+
+Callsign/CCS7 ID lock settings query (GET)/change (POST). Returns currently
+active settings.
+
+Query (optional):
+```json
+{
+  "id1": 2161005,
+  "callsign1": "HA2NON",
+  "id2": 2161006,
+  "callsign2": "HG1MA",
+  "id3": 0,
+  "callsign3": ""
+}
+```
+Response:
+```json
+{
+  "id1": 2161005,
+  "callsign1": "HA2NON",
+  "id2": 2161006,
+  "callsign2": "HG1MA",
+  "id3": 0,
+  "callsign3": ""
 }
 ```
 
@@ -1357,20 +1405,55 @@ Response:
 {}
 ```
 
-### bmmsettings.cgi
+### status-dmrsms.cgi
 
-BrandMeister API settings query (GET)/change (POST). Returns currently
-active settings.
+Returns current status of DMR SMS sending, if the modem is in DMR mode.
+Otherwise it returns 400 Bad Request. It also handles SMS sending.
+
+Call types: 0 - private, 1 - group.
+Format IDs: 0 - ETSI, 1 - UDP, 2 - UDP/Chinese. See user manual for more info.
+If a new message is received, *rx_msg_valid* is 1.
+Setting a new *send_srcid* in the query overwrites the *default_srcid*.
+If *send_to_modem* is 0, the SMS will be sent to the currently active connector.
+If *intercept_net_msgs* is 1, then SMS messages coming from the network to
+the *default_srcid* will be processed.
+If *only_save* is 1, the SMS will not get sent, only the *send_srcid* and
+*intercept_net* settings will be stored.
+
+Messages are in hexadecimal UTF16BE format. Example: "BEER" = "0042004500450052"
+Max. message length which can be sent is currently 75 UTF16BE characters (150
+hex char pairs).
 
 Query (optional):
 ```json
 {
-  "apikey": "abcdef"
+  "only_save": 0,
+  "intercept_net_msgs": 0,
+  "send_dstid": 2161005,
+  "send_calltype": 0,
+  "send_srcid": 9998,
+  "send_format": 0,
+  "send_tdma_channel": 0,
+  "send_to_modem": 0,
+  "send_msg": "0042004500450052"
 }
 ```
+
 Response:
 ```json
 {
-  "apikey": "abcdef"
+  "default_srcid": 9998,
+  "intercept_net_msgs": 0,
+  "send_ongoing": 0,
+  "send_success": 1,
+  "send_fail": 0,
+  "rx_msg_valid": 0,
+  "rx_msg_srcid": 1234,
+  "rx_msg_dstid": 9998,
+  "rx_msg_calltype": 0,
+  "rx_msg_format": 0,
+  "rx_msg_from_modem": 0,
+  "rx_msg": "0042004500450052"
 }
 ```
+
